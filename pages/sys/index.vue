@@ -6,19 +6,13 @@
           <h2 class="mb-4">LASSO AI / 招募測評管理</h2>
           <v-card outlined>
             <v-toolbar flat>
-              <v-btn color="primary">
-                <v-icon>mdi-plus</v-icon> 新增人選
+              <v-btn color="success">
+                <v-icon>mdi-account-plus</v-icon>
+                <span class="ml-2">新增人選</span>
               </v-btn>
-              <v-btn color="primary" class="ml-4">
-                <v-icon>mdi-plus</v-icon> 批次匯入
-              </v-btn>
-              <v-btn
-                color="primary"
-                class="ml-4"
-                :disabled="!selected.length"
-                @click="handleToggleModal({ type: 'block' })"
-              >
-                <v-icon>mdi-plus</v-icon> 測評邀請
+              <v-btn color="success" class="ml-4">
+                <v-icon>mdi-account-multiple-plus</v-icon>
+                <span class="ml-2">批次匯入</span>
               </v-btn>
               <v-btn
                 color="primary"
@@ -26,9 +20,22 @@
                 :disabled="!selected.length"
                 @click="handleToggleModal({ type: 'block' })"
               >
-                <v-icon>mdi-plus</v-icon> 寄送報告
+                <v-icon>mdi-message-plus</v-icon>
+                <span class="ml-2">測評邀請</span>
+              </v-btn>
+              <v-btn
+                color="warning"
+                class="ml-4"
+                :disabled="!selected.length"
+                @click="handleToggleModal({ type: 'block' })"
+              >
+                <v-icon>mdi-email</v-icon>
+                <span class="ml-2">寄送報告</span>
               </v-btn>
               <v-spacer></v-spacer>
+              <!-- <v-btn color="primary" large text>
+                <v-icon>mdi-filter-menu</v-icon>
+              </v-btn>   -->
               <v-text-field
                 flat
                 solo-inverted
@@ -36,6 +43,7 @@
                 prepend-inner-icon="mdi-magnify"
                 label="搜尋人選"
                 class="hidden-sm-and-down"
+                append-outer-icon="mdi-filter-menu"
               ></v-text-field>
             </v-toolbar>
             <v-card-text>
@@ -48,8 +56,9 @@
                 show-select
                 class="elevation-1"
               >
-                <template #item.aiExam>
+                <template #item.aiExam="{ item }">
                   <v-chip
+                    v-if="item.aiExamStatus === 1"
                     :color="!selected.length ? 'primary' : 'default'"
                     dark
                     :style="
@@ -57,11 +66,14 @@
                     "
                     @click="handleToggleModal({ type: 'inline' })"
                   >
-                    {{ '測評邀請' }}
+                    <!-- <v-icon>mdi-message-plus</v-icon> -->
+                    <span>測評邀請</span>
                   </v-chip>
+                  <span v-else>{{ statusMap[item.aiExamStatus] }}</span>
                 </template>
-                <template #item.mayoExam>
+                <template #item.mayoExam="{ item }">
                   <v-chip
+                    v-if="item.mayoExamStatus === 1"
                     :color="!selected.length ? 'primary' : 'default'"
                     dark
                     :style="
@@ -69,11 +81,14 @@
                     "
                     @click="handleToggleModal({ type: 'inline' })"
                   >
-                    {{ '測評邀請' }}
+                    <!-- <v-icon>mdi-message-plus</v-icon> -->
+                    <span>測評邀請</span>
                   </v-chip>
+                  <span v-else>{{ statusMap[item.mayoExamStatus] }}</span>
                 </template>
-                <template #item.ddiExam>
+                <template #item.ddiExam="{ item }">
                   <v-chip
+                    v-if="item.ddiExamStatus === 1"
                     :color="!selected.length ? 'primary' : 'default'"
                     dark
                     :style="
@@ -81,19 +96,22 @@
                     "
                     @click="handleToggleModal({ type: 'inline' })"
                   >
-                    {{ '測評邀請' }}
+                    <!-- <v-icon>mdi-message-plus</v-icon> -->
+                    <span>測評邀請</span>
                   </v-chip>
+                  <span v-else>{{ statusMap[item.ddiExamStatus] }}</span>
                 </template>
                 <template #item.tools>
                   <v-chip
-                    :color="!selected.length ? 'primary' : 'default'"
+                    :color="!selected.length ? 'warning' : 'default'"
                     dark
                     :style="
                       selected.length ? 'cursor: not-allowed' : 'cursor:pointer'
                     "
                     @click="handleToggleModal({ type: 'inline' })"
                   >
-                    {{ '寄送報告' }}
+                    <v-icon>mdi-email</v-icon>
+                    <span class="ml-2">寄送報告</span>
                   </v-chip>
                 </template>
               </v-data-table>
@@ -155,83 +173,122 @@ export default class SysIndex extends Vue {
     { text: '功能', value: 'tools', align: 'start', sortable: false }
   ]
 
+  private statusMap: any = {
+    1: '測評邀請',
+    2: '已逾期',
+    0: '等待作答中'
+  }
+
   private items: Array<any> = [
     {
       name: 'Keiko',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 1,
+      ddiExamStatus: 1,
+      mayoExamStatus: 1
     },
     {
       name: 'Keiko1',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 0,
+      ddiExamStatus: 1,
+      mayoExamStatus: 2
     },
     {
       name: 'Keiko2',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 1,
+      ddiExamStatus: 1,
+      mayoExamStatus: 1
     },
     {
       name: 'Keiko3',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 0,
+      ddiExamStatus: 0,
+      mayoExamStatus: 0
     },
     {
       name: 'Keiko4',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 2,
+      ddiExamStatus: 1,
+      mayoExamStatus: 0
     },
     {
       name: 'Keiko5',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 2,
+      ddiExamStatus: 1,
+      mayoExamStatus: 2
     },
     {
       name: 'Keiko6',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 0,
+      ddiExamStatus: 0,
+      mayoExamStatus: 1
     },
     {
       name: 'Keiko7',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 2,
+      ddiExamStatus: 1,
+      mayoExamStatus: 1
     },
     {
       name: 'Keiko8',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 1,
+      ddiExamStatus: 0,
+      mayoExamStatus: 2
     },
     {
       name: 'Keiko9',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 2,
+      ddiExamStatus: 0,
+      mayoExamStatus: 0
     },
     {
       name: 'Keiko10',
       email: 'keiko@gmail.com',
       dept: 'Research & Development',
       position: 'RD',
-      edu: 'Better than yours'
+      edu: 'Better than yours',
+      aiExamStatus: 1,
+      ddiExamStatus: 2,
+      mayoExamStatus: 0
     }
   ]
 
