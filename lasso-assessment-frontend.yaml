@@ -1,0 +1,63 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "lasso-assessment-frontend"
+  labels:
+    app: "lasso-assessment-frontend"
+  namespace: lasso-assessment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "lasso-assessment-frontend"
+  template:
+    metadata:
+      labels:
+        app: "lasso-assessment-frontend"
+    spec:
+      imagePullSecrets:
+        - name: "uatmayodockerhub"
+      dnsPolicy: "Default"
+      restartPolicy: "Always"
+      containers:
+        - name: "lasso-assessment-frontend"
+          image: "uatmayodockerhub.azurecr.io/lasso-assessment-frontend:latest"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lasso-assessment-frontend
+  namespace: lasso-assessment
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: lasso-assessment-frontend
+  type: ClusterIP
+
+
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: lasso-assessment-frontend
+  namespace: lasso-assessment
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  tls:
+    - hosts:
+        - lasso-assessment-frontend.f048f36cd9de4dccae74.southeastasia.aksapp.io
+      secretName: f048f36cd9de4dccae74-tls
+  rules:
+    - host: "lasso-assessment-frontend.f048f36cd9de4dccae74.southeastasia.aksapp.io"
+      http:
+        paths:
+          - backend:
+              serviceName: lasso-assessment-frontend
+              servicePort: 80
+            path: /
+
