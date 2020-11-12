@@ -195,7 +195,7 @@ export default class f2eIndex extends Vue {
     if (this.answers[this.answers.length - 1].scale !== null) {
       return setTimeout(() => {})
     } else {
-      await this.throttleHelper(this.selectOptionHelper, [option], 0)
+      await this.throttleHelper(this.selectOptionHelper, [option], 1200)
     }
   }
 
