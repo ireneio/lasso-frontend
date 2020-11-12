@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" v-show="$route.query.type === 'enabled'">
     <header class="header">
       <div class="header__logo"></div>
       <div class="header__timer">
