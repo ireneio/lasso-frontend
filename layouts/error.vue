@@ -1,12 +1,13 @@
 <template>
   <v-app dark>
+    Page Not Found
     <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
     </h1>
     <h1 v-else>
       {{ otherError }}
     </h1>
-    <NuxtLink to="/">
+    <NuxtLink to="/f2e">
       Home page
     </NuxtLink>
   </v-app>
@@ -14,7 +15,7 @@
 
 <script>
 export default {
-  layout: 'empty',
+  layout: 'frontend',
   props: {
     error: {
       type: Object,
@@ -33,6 +34,9 @@ export default {
     return {
       title
     }
+  },
+  created() {
+    this.$router.push('/f2e')
   }
 }
 </script>
