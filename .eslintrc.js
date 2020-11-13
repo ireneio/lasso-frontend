@@ -30,6 +30,7 @@ module.exports = {
     'nuxt/no-cjs-in-config': 'off',
     'vue/max-attributes-per-line': 'off',
     'no-tabs': 'off',
-    'vue/valid-v-slot': 'off'
+    'vue/valid-v-slot': 'off',
+    'vue/no-parsing-error': 'off'
   }
 }

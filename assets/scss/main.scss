@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import './utils/fonts';
 @import './utils/variables';
 
@@ -27,3 +28,34 @@ body {
   padding-top: 0;
   padding-bottom: 0;
 }
+=======
+@import './utils/fonts';
+@import './utils/variables';
+
+$STAYFUN_BLUE: #3c8dbc;
+
+html,
+body {
+  font-family: customFont !important;
+}
+
+body {
+  background-color: #fff;
+  overflow-x: hidden !important;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.v-file-input .v-file-input__text.v-file-input__text--chips {
+  color: $STAYFUN_BLUE !important;
+}
+
+.v-text-field .v-label--active {
+  transform: translateY(-18px) scale(0.8);
+}
+
+.v-application--is-ltr .v-banner__wrapper {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+>>>>>>> ca37f10f0fb7c92426aac75c23d193a792ef8a11

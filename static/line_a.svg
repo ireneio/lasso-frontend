@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <svg xmlns="http://www.w3.org/2000/svg" width="423.271" height="83.469" viewBox="0 0 423.271 83.469">
     <g>
         <g fill="none" stroke="#e2a638">
@@ -6,3 +7,13 @@
         </g>
     </g>
 </svg>
+=======
+<svg xmlns="http://www.w3.org/2000/svg" width="423.271" height="83.469" viewBox="0 0 423.271 83.469">
+    <g>
+        <g fill="none" stroke="#e2a638">
+            <path stroke-width="1.5px" d="M-1251.449 2658.375c67.74-12.067 78.765-78.769 160.859-79.946s92.635 56.694 167.518 75.236a236.175 236.175 0 0 0 86.536 4.71" transform="translate(5.247 -602.065) translate(695 -16) translate(556 -1959.596)"/>
+            <path d="M-899.872 2634.448s-74.407-36.3-157.234-16.05-90 28.115-138.558 31.047-88.481-13.51-127.24-15" transform="translate(5.247 -602.065) translate(695 -16) translate(622.677 -1969)"/>
+        </g>
+    </g>
+</svg>
+>>>>>>> ca37f10f0fb7c92426aac75c23d193a792ef8a11
