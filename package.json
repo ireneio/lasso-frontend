@@ -63,9 +63,13 @@
     "husky": "^4.2.5",
     "jest": "^26.4.2",
     "lint-staged": "^10.2.11",
+    "postcss-loader": "^4.0.4",
     "sass-loader": "^7.1.0",
     "ts-jest": "^26.3.0",
     "vue-jest": "^3.0.4",
     "webpack-bundle-analyzer": "^3.9.0"
-  }
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }
