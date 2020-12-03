@@ -261,7 +261,7 @@ export default class f2eIndex extends Vue {
       ]
     }
 
-    console.log(JSON.stringify(requestBody))
+    // console.log(JSON.stringify(requestBody))
 
     const result = await $axios.post(
       '/Client/UpdateAssessmentScales',
@@ -313,11 +313,10 @@ export default class f2eIndex extends Vue {
 @import '../../assets/scss/utils/_variables.scss';
 .wrapper {
   min-height: calc(100vh - 55px);
+  max-height: calc(100vh - 55px);
   min-width: 100vw;
   padding: 16px;
-  padding-top: 0;
   background-image: url('/bg@3x.png');
-  // background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
 }
