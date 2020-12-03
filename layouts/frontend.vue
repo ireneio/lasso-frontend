@@ -40,9 +40,12 @@ export default class FrontendLayout extends Vue {
   }
 
   private mounted() {
+
     setInterval(() => {
       this.timer === null ? (this.timer = 1000) : (this.timer += 1000)
+      window.scrollTo(0, 100)
     }, 1000)
+
   }
 
   private beforeDestroy() {
@@ -52,11 +55,6 @@ export default class FrontendLayout extends Vue {
 </script>
 <style lang="scss" scoped>
 @import '../assets/scss/utils/_variables.scss';
-#inspire {
-  height: calc(100vh - 55px);
-  overflow: hidden;
-}
-
 .header {
   display: flex;
   height: 55px;
