@@ -314,14 +314,9 @@ export default class f2eIndex extends Vue {
 .wrapper {
   padding: 16px;
   background-image: url('/bg@3x.png');
-  background-position: center center;
+  // background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 100%;
-  background-attachment: fixed;
-  -o-background-size: cover;
-  -moz-background-size: cover;
-  -webkit-background-size: cover;
 }
 .options {
   flex: 0 0 calc(33% - 16px);
@@ -342,11 +337,11 @@ export default class f2eIndex extends Vue {
   &__wrapper {
     border-radius: 10px;
     background-color: $white;
-    background-attachment: fixed;
-    background-size: cover;
-    -o-background-size: cover;
-    -moz-background-size: cover;
-    -webkit-background-size: cover;
+    // background-attachment: fixed;
+    // background-size: cover;
+    // -o-background-size: cover;
+    // -moz-background-size: cover;
+    // -webkit-background-size: cover;
     padding: 18px 16px;
   }
   &__title {
