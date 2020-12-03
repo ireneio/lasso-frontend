@@ -316,6 +316,7 @@ export default class f2eIndex extends Vue {
   max-height: calc(100vh - 55px);
   min-width: 100vw;
   padding: 16px;
+  margin-top: 16px;
   background-image: url('/bg@3x.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -339,11 +340,6 @@ export default class f2eIndex extends Vue {
   &__wrapper {
     border-radius: 10px;
     background-color: $white;
-    // background-attachment: fixed;
-    // background-size: cover;
-    // -o-background-size: cover;
-    // -moz-background-size: cover;
-    // -webkit-background-size: cover;
     padding: 18px 16px;
   }
   &__title {
