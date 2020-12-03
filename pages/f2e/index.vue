@@ -312,9 +312,10 @@ export default class f2eIndex extends Vue {
 <style lang="scss" scoped>
 @import '../../assets/scss/utils/_variables.scss';
 .wrapper {
-  min-height: 100vh;
+  min-height: calc(100vh - 55px);
   min-width: 100vw;
   padding: 16px;
+  padding-top: 0;
   background-image: url('/bg@3x.png');
   // background-position: center center;
   background-repeat: no-repeat;
