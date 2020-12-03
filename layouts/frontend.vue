@@ -43,9 +43,10 @@ export default class FrontendLayout extends Vue {
 
     setInterval(() => {
       this.timer === null ? (this.timer = 1000) : (this.timer += 1000)
-      window.scrollTo(0, 100)
     }, 1000)
-
+    setTimeout(() => {
+      window.scrollTo(0, 100)
+    }, 2000)
   }
 
   private beforeDestroy() {
