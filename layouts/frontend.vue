@@ -80,6 +80,6 @@ export default class FrontendLayout extends Vue {
   min-height: calc(100vh - 55px);
   max-height: calc(100vh - 55px);
   height: calc(100vh - 55px);
-
+  overflow: hidden;
 }
 </style>
