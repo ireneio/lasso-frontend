@@ -369,6 +369,7 @@ export default class f2eIndex extends Vue {
 }
 .topWrapper {
   margin-top: 26px;
+  background-color: $white;
 }
 .bottomWrapper {
   margin-top: 10px;
