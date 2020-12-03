@@ -228,7 +228,6 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
-// import { authStore } from '~/store'
 
 @Component
 export default class DefaultLayout extends Vue {

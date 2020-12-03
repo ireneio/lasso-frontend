@@ -122,15 +122,10 @@ export default class f2eLanding extends Vue {
   background-image: url(/bg@3xlanding.png);
   background-size: cover;
   background-repeat: no-repeat;
-  // background-position: center center;
 }
 .logo {
-  // margin-top: 348px;
-  // position: relative;
-  // top: 348px;
   width: 258px;
   height: 65px;
-  // padding: 16px;
   background-image: url(/lasso_logo_white@3x.png);
   background-size: contain;
   background-repeat: no-repeat;
@@ -188,7 +183,6 @@ export default class f2eLanding extends Vue {
   color: $black;
 }
 .section {
-  // margin-top: 95px;
   padding: 0 45px;
   &__box {
     margin-top: 120px;

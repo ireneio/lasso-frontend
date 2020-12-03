@@ -35,11 +35,7 @@ export default class f2eSuccess extends Vue {
 .loading {
   height: 100vh;
   width: 100vw;
-  // overflow: hidden;
   &__warpUp {
-    // position: relative;
-    // top: 0;
-    // left: 0;
     background-image: url(/line_d.svg);
     width: 100vw;
     height: 20vh;
@@ -48,9 +44,6 @@ export default class f2eSuccess extends Vue {
     background-position: center center;
   }
   &__warpDown {
-    // position: absolute;
-    // bottom: 0;
-    // left: 0;
     background-image: url(/line_e.svg);
     width: 100vw;
     height: 20vh;
@@ -59,8 +52,6 @@ export default class f2eSuccess extends Vue {
     background-position: center center;
   }
   &__center {
-    // position: relative;
-    // top: 72px;
     background-image: url(/people.svg);
     width: 80vw;
     margin-left: 10vw;

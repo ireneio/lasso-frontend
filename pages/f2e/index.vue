@@ -318,6 +318,10 @@ export default class f2eIndex extends Vue {
   background-repeat: no-repeat;
   background-size: cover;
   height: 100%;
+  background-attachment: fixed;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
 }
 .options {
   flex: 0 0 calc(33% - 16px);
@@ -391,7 +395,6 @@ export default class f2eIndex extends Vue {
     background-image: url(/talkbox_corner_r.svg);
   }
   &__pfp {
-    // flex: 0 0 15%;
     border-radius: 50%;
     height: 50px;
     width: 50px;
