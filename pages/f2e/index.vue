@@ -341,7 +341,12 @@ export default class f2eIndex extends Vue {
   }
   &__wrapper {
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: $white;
+    background-attachment: fixed;
+    background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
     padding: 18px 16px;
   }
   &__title {
