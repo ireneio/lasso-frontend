@@ -53,7 +53,7 @@ export default class FrontendLayout extends Vue {
 <style lang="scss" scoped>
 @import '../assets/scss/utils/_variables.scss';
 #inspire {
-  height: 100vh;
+  height: calc(100vh - 55px);
   overflow: hidden;
 }
 
