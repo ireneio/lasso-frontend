@@ -14,6 +14,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
+// import { authStore } from '~/store'
 
 @Component
 export default class FrontendLayout extends Vue {
@@ -77,5 +78,6 @@ export default class FrontendLayout extends Vue {
 }
 .main {
   min-height: calc(100vh - 55px);
+  max-height: calc(100vh - 55px);
 }
 </style>
