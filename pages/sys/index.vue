@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12">
-          <h2 class="mb-4">LASSO AI / 招募測評管理</h2>
+          <h2 class="mb-4">招募測評管理</h2>
           <v-card outlined>
             <v-toolbar flat>
               <v-btn color="success">
