@@ -19,7 +19,7 @@
       </aside>
       <div class="main">
         <header class="header">
-          <h1 class="title">招募測評管理</h1>
+          <h1 class="header__title">{{ menuData.find(item => item.id === Number(currentTab)).label }}</h1>
           <div class="status">
             <div class="status__dp"></div>
             <div class="status__email">Kinlau2000@gmail.com</div>
@@ -29,6 +29,14 @@
         <main class="body">
           <Nuxt />
         </main>
+        <footer class="footer">
+          <div class="lang">
+            <div class="lang__icon"></div>
+            <div class="lang__text">繁體中文</div>
+          </div>
+          <div class="copyright">Copyright © 2019 MAYO Human Capital Inc. All rights reserved.</div>
+          <div class="privacy">隱私權政策 / 關於我們</div>
+        </footer>
       </div>
     </div>
   </v-app>
@@ -39,10 +47,10 @@ import { Component, Vue, Watch } from 'nuxt-property-decorator'
 
 @Component
 export default class DefaultLayout extends Vue {
-  private currentTab: string | null = '首頁概覽'
+  private currentTab: string | null = '1'
 
   private menuData: Array<any> = [
-    { label: '首頁概覽', iconUrl: '/home@3x.png', url: '/sys/test', id: 1, subtabs: [] },
+    { label: '首頁概覽', iconUrl: '/home@3x.png', url: '/sys/', id: 1, subtabs: [] },
     { label: '招募測評管理', iconUrl: '/load@3x.png', url: '/sys/recruitment', id: 2, subtabs: [] },
     { label: '在職測評管理', iconUrl: '/business@3x.png', url: '/sys/employee', id: 3, subtabs: [ { label: '測評邀請作業', url: '/sys/employee/', id: 3 }, { label: 'MAYO測評比較分析', url: '/sys/employee/analysis', id: 3 } ] },
     { label: '測評管理設定', iconUrl: '/setting@3x.png', url: '/sys/survey', id: 4, subtabs: [ { label: 'AI測評設定', url: '/sys/survey/', id: 4 }, { label: '邀請郵件範本管理', url: '/sys/survey/invitation', id: 4 }, { label: 'SMS管理', url: '/sys/survey/sms', id: 4 } ] },
@@ -50,7 +58,6 @@ export default class DefaultLayout extends Vue {
   ]
 
   private handleUpdateTab(label: string, url: string, type: string, subtabs: Array<any>, id: Number) : void {
-    console.log(url)
     if(type === 'primary') {
       this.currentTab = id.toString()
       localStorage.setItem('tab', id.toString())
@@ -66,37 +73,17 @@ export default class DefaultLayout extends Vue {
 
   private get username() {
     return 'User'
-    // return authStore.user ? authStore.user.username : ''
   }
 
   private get companyName() {
     return 'MAYO'
-
-    // return authStore.user
-    //   ? authStore.user.groups.length
-    //     ? authStore.user.groups[0].groupname
-    //     : ''
-    //   : ''
   }
 
   private get dP() {
     return ''
-    // return authStore.user ? authStore.user.photopath : ''
   }
 
-  private async handleLogout(): Promise<any> {
-    // try {
-    //   this.$nuxt.$loading.start()
-    //   const result = await authStore.signOut({
-    //     token: this.$cookies.get('accessToken')
-    //   })
-    //   this.$router.push('/account')
-    // } catch (e) {
-    //   this.errorDialog = true
-    // } finally {
-    //   this.$nuxt.$loading.finish()
-    // }
-  }
+  private async handleLogout(): Promise<any> {}
 
   private created() {
     const tab = localStorage.getItem('tab')
@@ -112,7 +99,7 @@ export default class DefaultLayout extends Vue {
   display: flex;
 }
 .aside {
-  flex: 0 0 14%;
+  width: 250px;
   background-color: #282828;
   min-height: 100vh;
 }
@@ -122,6 +109,9 @@ export default class DefaultLayout extends Vue {
 .header {
   display: flex;
   padding: 20px 22px;
+  &__title {
+    font-size: 22px;
+  }
 }
 .body {
   background-color: #f4f8f9;
@@ -163,11 +153,6 @@ export default class DefaultLayout extends Vue {
     cursor: pointer;
   }
 }
-.title {
-  font-weight: bold;
-  color: #282828;
-  font-size: 22px;
-}
 .tabs {
   padding-top: 4px;
 }
@@ -197,11 +182,42 @@ export default class DefaultLayout extends Vue {
 }
 .subtab {
   color: #fff;
-  background-color: #959595;
+  background-color: #555555;
   &__title {
     margin-left: 55px;
     padding: 18px 0;
     font-size: 14px;
   }
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: calc(100vw - 250px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  color: #c7c7c7;
+  font-size: 12px;
+  font-weight: 100;
+  background-color: #f4f8f9;
+}
+.lang {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  &__icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 2px;
+    background-image: url(/icon_earth@3x.png);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+}
+.privacy{
+  margin-right: 22px;
+  cursor: pointer;
 }
 </style>

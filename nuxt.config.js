@@ -16,7 +16,13 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        src: 'https://canvasjs.com/assets/script/canvasjs.min.js',
+        body: true
+      }
+    ]
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
@@ -24,7 +30,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/axios'
+    '~/plugins/axios',
+    '~/plugins/chartjs'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -51,42 +58,10 @@ export default {
   vuetify: {
     optionsPath: './vuetify.options.js',
     customVariables: ['~/assets/variables.scss']
-    // theme: {
-    //   dark: true,
-    //   themes: {
-    //     dark: {
-    //       primary: colors.blue.darken2,
-    //       accent: colors.grey.darken3,
-    //       secondary: colors.amber.darken3,
-    //       info: colors.teal.lighten1,
-    //       warning: colors.amber.base,
-    //       error: colors.deepOrange.accent4,
-    //       success: colors.green.accent3
-    //     }
-    //   }
-    // }
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {
-    // postcss: {
-    //   // Add plugin names as key and arguments as value
-    //   // Install them before as dependencies with npm or yarn
-    //   plugins: {
-    //     // Disable a plugin by passing false as value
-    //     'postcss-url': false,
-    //     'postcss-nested': {},
-    //     'postcss-responsive-type': {},
-    //     'postcss-hexrgba': {}
-    //   },
-    //   preset: {
-    //     // Change the postcss-preset-env settings
-    //     autoprefixer: {
-    //       grid: true
-    //     }
-    //   }
-    // }
-  },
+  build: {},
   loading: {
     color: '#fff',
     height: '2px'
