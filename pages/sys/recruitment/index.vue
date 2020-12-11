@@ -72,15 +72,15 @@
       </thead>
       <div class="table__divider"></div>
       <tbody class="table__body">
-        <tr class="table__row table__row--selected table__row--selectable" @click="handleRowClick">
+        <tr class="table__row table__row--selected table__row--selectable">
           <td class="table__cell">
             <input type="checkbox" @change="handleCheck">
           </td>
-          <td class="table__cell">研發部</td>
-          <td class="table__cell">王昭棟</td>
-          <td class="table__cell">Wanddundun@gmail.com</td>
-          <td class="table__cell">會計</td>
-          <td class="table__cell">會計</td>
+          <td class="table__cell" @click="handleRowClick">研發部</td>
+          <td class="table__cell" @click="handleRowClick">王昭棟</td>
+          <td class="table__cell" @click="handleRowClick">Wanddundun@gmail.com</td>
+          <td class="table__cell" @click="handleRowClick">會計</td>
+          <td class="table__cell" @click="handleRowClick">會計</td>
           <td class="table__cell">
             <div class="table__cellCircle">
               <div class="circle"></div>
@@ -99,17 +99,19 @@
             </div>
           </td>
         </tr>
-        <tr class="table__row">
+        <tr class="table__row table__row--selected table__row--selectable">
           <td class="table__cell">
-            <input type="checkbox" name="" id="">
+            <input type="checkbox" @change="handleCheck">
           </td>
-          <td class="table__cell">研發部</td>
-          <td class="table__cell">王昭棟</td>
-          <td class="table__cell">Wanddundun@gmail.com</td>
-          <td class="table__cell">會計</td>
-          <td class="table__cell">會計</td>
+          <td class="table__cell" @click="handleRowClick">研發部</td>
+          <td class="table__cell" @click="handleRowClick">王昭棟</td>
+          <td class="table__cell" @click="handleRowClick">Wanddundun@gmail.com</td>
+          <td class="table__cell" @click="handleRowClick">會計</td>
+          <td class="table__cell" @click="handleRowClick">會計</td>
           <td class="table__cell">
-            <div class="circle"></div>
+            <div class="table__cellCircle">
+              <div class="circle"></div>
+            </div>
           </td>
           <td class="table__cell">
             <div class="table__toolbar">
@@ -117,7 +119,34 @@
                 <div class="tableBtn__icon tableBtn--iconInvite"></div>
                 <div class="tableBtn__text">測評邀請</div>
               </div>
-              <div class="tableBtn" @click="toggleSendReportModal = true">
+              <div class="tableBtn" @click.stop="toggleSendReportModal = true">
+                <div class="tableBtn__icon tableBtn--iconSent"></div>
+                <div class="tableBtn__text">寄送報告</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr class="table__row table__row--selected table__row--selectable">
+          <td class="table__cell">
+            <input type="checkbox" @change="handleCheck">
+          </td>
+          <td class="table__cell" @click="handleRowClick">研發部</td>
+          <td class="table__cell" @click="handleRowClick">王昭棟</td>
+          <td class="table__cell" @click="handleRowClick">Wanddundun@gmail.com</td>
+          <td class="table__cell" @click="handleRowClick">會計</td>
+          <td class="table__cell" @click="handleRowClick">會計</td>
+          <td class="table__cell">
+            <div class="table__cellCircle">
+              <div class="circle"></div>
+            </div>
+          </td>
+          <td class="table__cell">
+            <div class="table__toolbar">
+              <div class="tableBtn" @click.stop="toggleSendInviteModal = true">
+                <div class="tableBtn__icon tableBtn--iconInvite"></div>
+                <div class="tableBtn__text">測評邀請</div>
+              </div>
+              <div class="tableBtn" @click.stop="toggleSendReportModal = true">
                 <div class="tableBtn__icon tableBtn--iconSent"></div>
                 <div class="tableBtn__text">寄送報告</div>
               </div>
