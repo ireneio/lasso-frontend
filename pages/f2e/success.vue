@@ -19,9 +19,9 @@ export default class f2eSuccess extends Vue {
     if (!this.$route.query.type || this.$route.query.type.toString() !== 'success') {
       this.$router.push('/f2e')
     } else {
-      this.timer = setTimeout(() => {
-        // this.$router.push('/f2e')
-      }, 5000)
+      // this.timer = setTimeout(() => {
+      //   this.$router.push('/f2e')
+      // }, 5000)
     }
   }
 

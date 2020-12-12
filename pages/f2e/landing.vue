@@ -53,17 +53,31 @@
           </div>
         </div>
       </section>
+      <section class="section privacy">
+        <div class="privacy__text">
+          填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
+          <br />
+          <br />
+          測評有特殊設計，會從各方面評估您測評結果的可參考度，請認真專注在每一題的作答即可。
+          <br />
+          <br />
+          CAT職能認知測評結果報告會同時提供面談參考題目，讓企業可以進一步深入詢問並了解您的相關經驗與職能等級。
+          <br />
+          <br />
+          如果您已經準備就緒，請點選確認按鈕開始作答。
+        </div>
+        <div class="privacy__checkbox">
+          <input type="checkbox" v-model="privacy">
+          <div class="privacy__checkboxText">I agree to the <span class="privacy__highlight">privacy policy</span> </div>
+        </div>
+      </section>
       <div class="line line3">
         <v-btn color="#E2A638" rounded x-large @click="handleStart">
           <span style="color:#fff;">START</span>
         </v-btn>
       </div>
     </div>
-    <div class="loading" v-show="loading">
-      <div class="loading__warpUp"></div>
-      <div class="loading__center"></div>
-      <div class="loading__warpDown"></div>
-    </div>
+    <div class="loading" v-show="loading"></div>
   </div>
 </template>
 
@@ -76,6 +90,8 @@ import { $axios } from '~/utils/api'
 })
 export default class f2eLanding extends Vue {
   private loading: boolean = false
+
+  private privacy: boolean = false
 
   private handleStart(): void {
     this.loading = true
@@ -224,38 +240,29 @@ export default class f2eLanding extends Vue {
   height: 100vh;
   overflow: hidden;
   background-color: #fff;
-  &__warpUp {
-    position: absolute;
-    top: 30px;
-    left: 0;
-    background-image: url(/line4@3x.png);
-    width: 100vw;
-    height: 75px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+  background-image: url(/loading@3x.png);
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.privacy {
+  margin-top: 40px;
+  &__text {
+    margin-bottom: 40px;
+    font-size: 17px;
   }
-  &__warpDown {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-image: url(/line5@3x.png);
-    width: 100vw;
-    height: 75px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
   }
-  &__center {
-    position: relative;
-    top: calc(75px + 35px);
-    background-color: #fff;
-    background-image: url(/loadong.gif);
-    width: 100vw;
-    height: calc(100vh - 100px - 35px - 105px);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+  &__checkboxText {
+    margin-left: 5px;
+  }
+  &__highlight {
+    color: #e2a638;
   }
 }
 </style>
