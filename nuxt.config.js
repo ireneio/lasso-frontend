@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
@@ -67,6 +65,7 @@ export default {
     height: '2px'
   },
   env: {
-    API_URL: process.env.NUXT_ENV_API_URL
+    API_URL: process.env.NUXT_ENV_API_URL,
+    TIMEOUT_LIMIT: process.env.NUXT_ENV_TIMEOUT_LIMIT
   }
 }

@@ -3,12 +3,12 @@
     <div class="toolbar">
       <div class="btn toolbar__btn" 
         @click="handleSendInvitationMultiple"
-        :class="{'btn--disabled': checked.length === 0, 'btn--primary': checked.length > 0 }"
+        :class="{'btn--disabled': checked.length <= 1, 'btn--primary': checked.length > 0 }"
       >
         批次邀請
       </div>
       <div class="btn btn--primary toolbar__btn">批次匯入</div>
-      <div class="btn btn--primary toolbar__btn" @click="toggleAddNewPersonnelModal = true">新進人員</div>
+      <div class="btn btn--primary toolbar__btn" @click="handleOpenAddNewPersonnelModal">新進人員</div>
       <div class="tip toolbar__tip" @mouseover="hoverTooltip = true" @mouseleave="hoverTooltip = false">
         <div class="tip__icon"></div>
         <div class="tip__text tooltip__parent">顏色狀態說明
@@ -33,8 +33,8 @@
         </div>
       </div>
       <div class="search toolbar__search">
-        <input type="text" placeholder="請輸入部門/應徵職缺/姓名" class="search__input" v-model="searchForm.keyword">
-        <div class="search__btn">
+        <input type="text" placeholder="請輸入部門/應徵職缺/姓名" class="search__input" v-model="searchForm.keyword" @keydown.enter="getAndMapTableData">
+        <div class="search__btn" @click="getAndMapTableData">
           <div class="search__btnIcon"></div>
         </div>
       </div>
@@ -72,77 +72,25 @@
       </thead>
       <div class="table__divider"></div>
       <tbody class="table__body">
-        <tr class="table__row table__row--selected table__row--selectable">
+        <tr class="table__row table__row--selected table__row--selectable"  v-for="(row, index) in tableData" :key="index">
           <td class="table__cell">
-            <input type="checkbox" @change="handleCheck">
+            <input type="checkbox" @change="handleCheck($event, row)">
           </td>
-          <td class="table__cell" @click="handleRowClick">研發部</td>
-          <td class="table__cell" @click="handleRowClick">王昭棟</td>
-          <td class="table__cell" @click="handleRowClick">Wanddundun@gmail.com</td>
-          <td class="table__cell" @click="handleRowClick">會計</td>
-          <td class="table__cell" @click="handleRowClick">會計</td>
-          <td class="table__cell">
-            <div class="table__cellCircle">
-              <div class="circle"></div>
+          <td class="table__cell" @click="handleRowClick" v-for="(colValue, colKey) in row" :key="colKey" v-show="colKey !== 'SubjectId'">
+            <div v-if="colKey !== 'CAT' && colKey !== 'SubjectId'">{{ colValue }}</div>
+            <div class="table__cellCircle" v-if="colKey === 'CAT' && colKey !== 'SubjectId'">
+              <div class="circle"
+                :class="{
+                  'circle--red': colValue === 9 || colValue === 99,
+                  'circle--yellow': colValue === 2 || colValue === 3 || colValue === 4,
+                  'circle--white': colValue === 0 || colValue === 1
+                }">
+              </div>
             </div>
           </td>
           <td class="table__cell">
             <div class="table__toolbar">
-              <div class="tableBtn" @click.stop="toggleSendInviteModal = true">
-                <div class="tableBtn__icon tableBtn--iconInvite"></div>
-                <div class="tableBtn__text">測評邀請</div>
-              </div>
-              <div class="tableBtn" @click.stop="toggleSendReportModal = true">
-                <div class="tableBtn__icon tableBtn--iconSent"></div>
-                <div class="tableBtn__text">寄送報告</div>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="table__row table__row--selected table__row--selectable">
-          <td class="table__cell">
-            <input type="checkbox" @change="handleCheck">
-          </td>
-          <td class="table__cell" @click="handleRowClick">研發部</td>
-          <td class="table__cell" @click="handleRowClick">王昭棟</td>
-          <td class="table__cell" @click="handleRowClick">Wanddundun@gmail.com</td>
-          <td class="table__cell" @click="handleRowClick">會計</td>
-          <td class="table__cell" @click="handleRowClick">會計</td>
-          <td class="table__cell">
-            <div class="table__cellCircle">
-              <div class="circle"></div>
-            </div>
-          </td>
-          <td class="table__cell">
-            <div class="table__toolbar">
-              <div class="tableBtn" @click.stop="toggleSendInviteModal = true">
-                <div class="tableBtn__icon tableBtn--iconInvite"></div>
-                <div class="tableBtn__text">測評邀請</div>
-              </div>
-              <div class="tableBtn" @click.stop="toggleSendReportModal = true">
-                <div class="tableBtn__icon tableBtn--iconSent"></div>
-                <div class="tableBtn__text">寄送報告</div>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="table__row table__row--selected table__row--selectable">
-          <td class="table__cell">
-            <input type="checkbox" @change="handleCheck">
-          </td>
-          <td class="table__cell" @click="handleRowClick">研發部</td>
-          <td class="table__cell" @click="handleRowClick">王昭棟</td>
-          <td class="table__cell" @click="handleRowClick">Wanddundun@gmail.com</td>
-          <td class="table__cell" @click="handleRowClick">會計</td>
-          <td class="table__cell" @click="handleRowClick">會計</td>
-          <td class="table__cell">
-            <div class="table__cellCircle">
-              <div class="circle"></div>
-            </div>
-          </td>
-          <td class="table__cell">
-            <div class="table__toolbar">
-              <div class="tableBtn" @click.stop="toggleSendInviteModal = true">
+              <div class="tableBtn" @click.stop="handleToggleSendInviteModal(row)">
                 <div class="tableBtn__icon tableBtn--iconInvite"></div>
                 <div class="tableBtn__text">測評邀請</div>
               </div>
@@ -177,32 +125,32 @@
               <div class="input">
                 <div class="input__label">姓名</div>
                 <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
+                  <input type="text" class="input__inputBox" v-model="addNewPersonnelForm.Name" />
                 </div>
               </div>
               <div class="input">
                 <div class="input__label">手機</div>
                 <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
+                  <input type="text" class="input__inputBox" v-model="addNewPersonnelForm.Phone"/>
                 </div>
               </div>
               <div class="input">
                 <div class="input__label">信箱</div>
                 <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
+                  <input type="text" class="input__inputBox" v-model="addNewPersonnelForm.Email"/>
                 </div>
               </div>
               <div class="input">
                 <div class="input__label">學歷</div>
                 <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
+                  <input type="text" class="input__inputBox" v-model="addNewPersonnelForm.Graduation"/>
                 </div>
               </div>
               <div class="input">
-                <div class="input__label">學歷</div>
+                <div class="input__label">績效</div>
                 <div class="input__input">
-                  <select class="input__inputBox">
-                    <option value="aaa">123</option>
+                  <select class="input__inputBox" v-model="addNewPersonnelForm.Graduation">
+                    <option :value="item.Key" v-for="item in performanceList" :key="item.Key">{{ item.Value }}</option>
                   </select>
                 </div>
               </div>
@@ -214,33 +162,9 @@
           <div class="inputWrapper">
             <div class="inputWrapper__row">
               <div class="input">
-                <div class="input__label">姓名</div>
-                <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
-                </div>
-              </div>
-              <div class="input">
-                <div class="input__label">手機</div>
-                <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
-                </div>
-              </div>
-              <div class="input">
-                <div class="input__label">信箱</div>
-                <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
-                </div>
-              </div>
-              <div class="input">
-                <div class="input__label">學歷</div>
-                <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
-                </div>
-              </div>
-              <div class="input">
                 <div class="input__label">部門</div>
                 <div class="input__input">
-                  <select class="input__inputBox">
+                  <select class="input__inputBox" v-model="addNewPersonnelForm.Department">
                     <option value="aaa">123</option>
                   </select>
                 </div>
@@ -248,29 +172,29 @@
               <div class="input">
                 <div class="input__label">階層</div>
                 <div class="input__input">
-                  <select class="input__inputBox">
-                    <option value="aaa">123</option>
+                  <select class="input__inputBox" v-model="addNewPersonnelForm.Class">
+                    <option :value="item.Key" v-for="item in classList" :key="item.Key">{{ item.Value }}</option>
                   </select>
                 </div>
               </div>
               <div class="input">
                 <div class="input__label">職系</div>
                 <div class="input__input">
-                  <select class="input__inputBox">
-                    <option value="aaa">123</option>
+                  <select class="input__inputBox" v-model="addNewPersonnelForm.Profession">
+                    <option :value="item.Key" v-for="item in professionList" :key="item.Key">{{ item.Value }}</option>
                   </select>
                 </div>
               </div>
               <div class="input">
                 <div class="input__label">工號</div>
                 <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
+                  <input type="text" class="input__inputBox" v-model="addNewPersonnelForm.EmployNumber"/>
                 </div>
               </div>
               <div class="input">
                 <div class="input__label">職位</div>
                 <div class="input__input">
-                  <input type="text" class="input__inputBox"/>
+                  <input type="text" class="input__inputBox" v-model="addNewPersonnelForm.Position"/>
                 </div>
               </div>
             </div>
@@ -282,20 +206,20 @@
             <div class="inputWrapper__row">
               <div class="input input--block">
                 <div class="input__input input__checkbox">
-                  <input type="checkbox" />
-                  <div class="input__label input__label--checkbox">MAYO測評</div>
+                  <input type="checkbox" id="mayo" v-model="surveyForm.MAYO"/>
+                  <div class="input__label input__label--checkbox" for="mayo">MAYO測評</div>
                 </div>
               </div>
               <div class="input input--block">
                 <div class="input__input input__checkbox">
-                  <input type="checkbox" />
-                  <div class="input__label input__label--checkbox">DDI測評</div>
+                  <input type="checkbox" id="ddi" v-model="surveyForm.DDI"/>
+                  <div class="input__label input__label--checkbox" for="ddi">DDI測評</div>
                 </div>
               </div>
               <div class="input input--block">
                 <div class="input__multipleInputsBox">
                   <div class="input__input input__checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" id="capp" v-model="surveyForm.CAT"/>
                     <div class="input__label input__label--checkbox">Lasso AI</div>
                   </div>
                   <div class="input__input input__multipleInputs--consequtive">
@@ -312,7 +236,7 @@
       <div class="modal__footer">
         <div class="modal__footerToolbar">
           <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="toggleAddNewPersonnelModal = false">取消</div>
-          <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive">確定</div>
+          <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive" @click="handleAddNewPersonnel">確定</div>
         </div>
       </div>
     </div>
@@ -325,24 +249,14 @@
         <div class="modal__section">
           <div class="modal__sectionTitle">
             <div class="modal__sectionTitleMainText">發送人選</div>
-            <div class="modal__sectionTitleSubText">選取人選：5人</div>
+            <div class="modal__sectionTitleSubText">選取人選：{{ this.selectMode === 0 ? '1' : this.checked.length }} 人</div>
           </div>
           <div class="inputWrapper">
             <div class="inputWrapper__row">
-              <div class="list">
-                <div class="list__listitem">
-                  <div>職位：產品經理</div>
-                  <div>受測者：王昭棟</div>
-                  <div class="list__icon"></div>
-                </div>
-                <div class="list__listitem">
-                  <div>職位：產品經理</div>
-                  <div>受測者：王昭棟</div>
-                  <div class="list__icon"></div>
-                </div>
-                <div class="list__listitem list__listitem--last">
-                  <div>職位：產品經理</div>
-                  <div>受測者：王昭棟</div>
+              <div class="list" v-if="selectedPersonnel.length">
+                <div class="list__listitem" v-for="item in selectedPersonnel" :key="item.SubjectId">
+                  <div>職位：{{ item.Position }}</div>
+                  <div>受測者：{{ item.Name }}</div>
                   <div class="list__icon"></div>
                 </div>
               </div>
@@ -355,20 +269,20 @@
             <div class="inputWrapper__row">
               <div class="input input--block">
                 <div class="input__input input__checkbox">
-                  <input type="checkbox" />
-                  <div class="input__label input__label--checkbox">MAYO測評</div>
+                  <input type="checkbox" id="mayo" v-model="surveyForm.MAYO"/>
+                  <div class="input__label input__label--checkbox" for="mayo">MAYO測評</div>
                 </div>
               </div>
               <div class="input input--block">
                 <div class="input__input input__checkbox">
-                  <input type="checkbox" />
-                  <div class="input__label input__label--checkbox">DDI測評</div>
+                  <input type="checkbox" id="ddi" v-model="surveyForm.DDI"/>
+                  <div class="input__label input__label--checkbox" for="ddi">DDI測評</div>
                 </div>
               </div>
               <div class="input input--block">
                 <div class="input__multipleInputsBox">
                   <div class="input__input input__checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" id="CAT" v-model="surveyForm.CAT"/>
                     <div class="input__label input__label--checkbox">Lasso AI</div>
                   </div>
                   <div class="input__input input__multipleInputs--consequtive">
@@ -385,7 +299,7 @@
       <div class="modal__footer">
         <div class="modal__footerToolbar">
           <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="toggleSendInviteModal = false">取消</div>
-          <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive">確定</div>
+          <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive" @click="handleSendInvitation">確定</div>
         </div>
       </div>
     </div>
@@ -1001,7 +915,49 @@ export default {
         toggleViewReport: true,
         toggleBasicDetailEdit: false,
         modalView: 0,
-        hoverTooltip: false
+        hoverTooltip: false,
+        addNewPersonnelForm: {
+          Name: '',
+          Email: '',
+          Phone: '',
+          Photo: '',
+          Identity: '',
+          Position: '',
+          Department: '',
+          Graduation: '',
+          Class: '',
+          Profession: '',
+          EmployNumber: ''
+        },
+        surveyForm: {
+          CAT: false,
+          MAYO: false,
+          DDI: false
+        },
+        subjectId: '',
+        performanceList: [],
+        professionList: [],
+        classList: [],
+        departmentList: [],
+        tableData: [],
+        selectMode: 0
+      }
+    },
+    computed: {
+      selectedPersonnel() {
+        const placeholder = { SubjectId: '', Name: '', Position: '' }
+        if(this.tableData.length) {
+          if(this.selectMode === 0) {
+            const res = this.tableData.find(item => item.SubjectId === this.subjectId)
+            return [ res !== undefined ? res : placeholder ]
+          } else if(this.selectMode === 1) {
+            return this.checked.map(item => {
+              return this.tableData.find(tableItem => tableItem.SubjectId === item)
+            })
+          }
+        } else {
+          return [ placeholder ]
+        }
       }
     },
     methods: {
@@ -1082,12 +1038,24 @@ export default {
       },
       handleOpenReport() {},
       async handleSendReport() {},
-      async handleSendInvitationMultiple() {
+      handleSendInvitationMultiple() {
         if(this.checked.length > 0) {
           this.toggleSendInviteModal = true
+          this.selectMode = 1
         }
       },
-      async handleSendInvitation() {},
+      handleToggleSendInviteModal(row) {
+        this.toggleSendInviteModal = true
+        this.selectMode = 0
+        this.subjectId = row.SubjectId
+      },
+      async handleSendInvitation(row) {
+        const confirmChecked = Object.values(this.surveyForm).find(item => item === true)
+        if(confirmChecked) {
+          await this.sendCreateAssessmentRequest('CAPP', 'invitation')
+          this.toggleSendInviteModal = false
+        }
+      },
       async handleUpdatePage(type) {
         if(type === 1) {
           this.pageData.currentPage += 1
@@ -1097,11 +1065,97 @@ export default {
           await this.sendGetTableDataRequest()
         }
       },
-      handleCheck(e, index) {
+      async handleOpenAddNewPersonnelModal() {
+        this.toggleAddNewPersonnelModal = true
+        const result = await this.sendGetParametersRequest('Platform', 'Performance')
+        this.performanceList = [ ...result.data.Results ]
+        const result2 = await this.sendGetParametersRequest('Platform', 'Profession')
+        this.professionList = [ ...result2.data.Results ]
+        const result3 = await this.sendGetParametersRequest('Platform', 'Class')
+        this.classList = [ ...result3.data.Results ]
+      },
+      async handleAddNewPersonnel() {
+        let iterator = Object.keys(this.surveyForm)
+        iterator = iterator.filter(item => this.surveyForm[item] === true)
+
+        await this.sendAddNewPersonnelRequest()
+        if(iterator.length) {
+          const result = await this.sendCreateAssessmentRequest(iterator)
+          this.subjectId = result.data.Results[0].SubjectId
+        }
+        await this.getAndMapTableData()
+        this.toggleAddNewPersonnelModal = false
+      },
+      handleCheck(e, row) {
         if(e.target.checked) {
-          this.checked = [...this.checked, index]
+          this.checked = [...this.checked, row.SubjectId]
         } else {
-          this.checked = this.checked.filter(item => item !== index)
+          this.checked = this.checked.filter(item => item !== row.SubjectId)
+        }
+      },
+      async sendGetParametersRequest(type, code) {    
+        try {
+          const requestBody = {
+                  Conditions: [
+              {
+                  ParameterType: type,
+                  TypeCode: code
+              }
+          ]
+          }
+          const result = await $axios.post('/Utility/QueryParameters', requestBody)
+          return result
+        } catch(e) {
+          console.log(e)
+        }
+      },
+      async sendCreateAssessmentRequest(list, type) {   
+        let requestBody 
+        try {
+          if(type === 'invitation') {
+            requestBody = {
+              Contents: [
+                { 
+                  SubjectId: this.subjectId,
+                  Type: 'CAT',
+                  EnableInvite: true,
+                  Version: '1.0',
+                  Period: 720,
+                  ReportViewers:[]
+                }
+              ]
+            }
+          } else {
+            requestBody = {
+              Contents: [
+                { 
+                  SubjectId: this.subjectId,
+                  Type: list[0],
+                  EnableInvite: true,
+                  Version: '1.0',
+                  Period: 16,
+                  ReportViewers:[]
+                }
+              ]
+            }
+          }
+          
+          const result = await $axios.post('/Assessment/CreateAssessments', requestBody)
+        } catch(e) {
+          console.log(e)
+        }
+      },
+      async sendAddNewPersonnelRequest() {    
+        try {
+          const requestBody = {
+            Contents: [
+              { ...this.addNewPersonnelForm, Identity: 1 }
+            ]
+          }
+          const result = await $axios.post('/Assessment/CreateSubjects', requestBody)
+          return result
+        } catch(e) {
+          console.log(e)
         }
       },
       async sendGetTableDataRequest() {
@@ -1118,13 +1172,30 @@ export default {
             Page: this.pageData.currentPage,
             RowsPerPage: this.pageData.rows
           }
-          $axios.post('/', requestBody)
+          const result = await $axios.post('/Assessment/QuerySubjects', requestBody)
+          return result
         } catch(e) {
 
         }
+      },
+      async getAndMapTableData() {
+        const result = await this.sendGetTableDataRequest()
+        this.tableData = result.data.Results.map(item => {
+          return {
+            SubjectId: item.SubjectId,
+            Department: item.Department,
+            Name: item.Name,
+            Email: item.Email,
+            Position: item.Position,
+            Class: item.Class,
+            CAT: item.CAT.Status ? item.CAT.Status : 0
+          }
+        })
       }
     },
-    async created() {},
+    async created() {
+      this.getAndMapTableData()
+    },
     mounted() {
       this.drawChart()
       this.drawRadarChart()
@@ -1355,8 +1426,8 @@ export default {
     border: 1px solid #dc6863;
   }
   &--green {
-    background-color: #dc6863;
-    border: 1px solid #dc6863;
+    background-color: #6d9053;
+    border: 1px solid #6d9053;
   }
   &--yellow {
     background-color: #febd0d;

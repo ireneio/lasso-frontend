@@ -1,5 +1,5 @@
 <template>
-  <div>recruitment index</div>
+  <div>employee index</div>
 </template>
 
 <script>

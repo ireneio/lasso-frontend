@@ -1,5 +1,5 @@
 <template>
-  <div>account index</div>
+  <div>survey index</div>
 </template>
 
 <script>

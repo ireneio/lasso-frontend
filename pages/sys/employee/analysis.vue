@@ -1,5 +1,5 @@
 <template>
-  <div>recruitment analysis</div>
+  <div>employee analysis</div>
 </template>
 
 <script>
