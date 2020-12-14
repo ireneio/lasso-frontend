@@ -154,7 +154,9 @@ export default class f2eIndex extends Vue {
         switch (result.status) {
           case 200:
             // submission success, go to next page
-            // this.$router.push('/f2e/success')
+            setTimeout(() => {
+              this.$router.push('/f2e/success?type=success')
+            }, 800)
             break
           default:
             throw new Error(result.status.toString())
@@ -163,9 +165,7 @@ export default class f2eIndex extends Vue {
         // error dialog
         console.log(e)
       } finally {
-        setTimeout(() => {
-          this.$router.push('/f2e/success?type=success')
-        }, 800)
+        
       }
     } else {
       setTimeout(() => {

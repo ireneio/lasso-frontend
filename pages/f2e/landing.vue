@@ -2,15 +2,15 @@
   <div>
     <div class="wrapper" v-show="!loading">
       <div class="logo"></div>
-      <div class="titleBox">
+      <!-- <div class="titleBox">
         <div class="titleBox__name">Kin Lau,</div>
         <div class="titleBox__desc">
           you are invited to conduct a web survey.
         </div>
         <div class="titleBox__footer">by MAYO Human Capital Inc.</div>
-      </div>
-      <div class="line line1"></div>
-      <div class="prologue">
+      </div> -->
+      <!-- <div class="line line1"></div> -->
+      <!-- <div class="prologue">
         <div class="prologuePp">
           The company is conducting a research study on Career Appraisal
           Potential Personality (CAPP). Your input to this survey will help us
@@ -21,9 +21,9 @@
           Please keep in mind, an estimate of approximately
           <strong>20 to 25 minutes</strong> to this survey is designed.
         </div>
-      </div>
-      <div class="line line2"></div>
-      <section class="section">
+      </div> -->
+      <!-- <div class="line line2"></div> -->
+      <!-- <section class="section">
         <div class="section__box section__box1">
           <div class="section__icon section__icon1"></div>
           <div class="section__desc">
@@ -52,7 +52,7 @@
             purposes of research for this project ).
           </div>
         </div>
-      </section>
+      </section> -->
       <section class="section privacy">
         <div class="privacy__text">
           填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
@@ -67,12 +67,12 @@
           如果您已經準備就緒，請點選確認按鈕開始作答。
         </div>
         <div class="privacy__checkbox">
-          <input type="checkbox" v-model="privacy">
-          <div class="privacy__checkboxText">I agree to the <span class="privacy__highlight">privacy policy</span> </div>
+          <input type="checkbox" v-model="privacy" id="privacy">
+          <label class="privacy__checkboxText" for="privacy">I agree to the <span class="privacy__highlight">privacy policy</span> </label>
         </div>
       </section>
       <div class="line line3">
-        <v-btn color="#E2A638" rounded x-large @click="handleStart">
+        <v-btn color="#E2A638" rounded x-large @click="handleStart" :disabled="!privacy">
           <span style="color:#fff;">START</span>
         </v-btn>
       </div>
@@ -94,14 +94,17 @@ export default class f2eLanding extends Vue {
   private privacy: boolean = false
 
   private handleStart(): void {
-    this.loading = true
-    this.timer = null
-    this.timer = setTimeout(() => {
-      this.loading = false
-      this.$router.push(
-        '/f2e?type=enabled&InvitationKey=L1ZcMWBV81MpXjDSSKSySpqqGDKLoOz0EuUBp6aHVvO4bW6lntUw5ZlZPuHczjU0gP'
-      )
-    }, 800)
+    if(this.privacy) {
+      this.loading = true
+      this.timer = null
+      this.timer = setTimeout(() => {
+        this.loading = false
+        this.$router.push(
+          '/f2e?type=enabled&InvitationKey=L1ZcMWBV81MpXjDSSKSySpqqGDKLoOz0EuUBp6aHVvO4bW6lntUw5ZlZPuHczjU0gP'
+        )
+      }, 800)
+    }
+    
   }
 
   private timer: any = null
@@ -186,7 +189,7 @@ export default class f2eLanding extends Vue {
   height: 38px;
 }
 .line3 {
-  margin-top: 105px;
+  margin-top: 44px;
   margin-bottom: 69px;
   background-image: url(/line_c.svg);
   height: 39px;
