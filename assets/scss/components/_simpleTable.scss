@@ -1,0 +1,35 @@
+.simpleTable {
+    width: 100%;
+    text-align: left;
+    font-weight: 300;
+    &--small {
+      font-size: 14px;
+    }
+    &__headerCell {
+      padding: 0 16px;
+      font-weight: 400;
+    }
+    &__headerCellData {
+      display: flex;
+      align-items: center;
+    }
+    &__headerCellDataBar {
+      margin-left: 40px;
+    }
+    &__divider {
+      height: 12px;
+      width: 100%;
+      background-color: transparent;
+    }
+    &__row {
+      &--odd {
+        background-color: rgba(244, 248, 249, .6);
+      }
+      &--even {
+        background-color: #f4f8f9;
+      }
+    }
+    &__col {
+      padding: 12px 16px;
+    }
+  }

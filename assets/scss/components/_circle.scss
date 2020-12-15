@@ -1,0 +1,33 @@
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #000;
+  border: 1px solid #000;
+  &--red {
+    background-color: #dc6863;
+    border: 1px solid #dc6863;
+  }
+  &--green {
+      background-color: #6d9053;
+      border: 1px solid #6d9053;
+  }
+  &--yellow {
+      background-color: #febd0d;
+      border: 1px solid #febd0d;
+  }
+  &--white {
+      background-color: #fff;
+      border: 1px solid #eee;
+  }
+}
+
+.report {
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(/iocn_paper_b@3x.png);
+}

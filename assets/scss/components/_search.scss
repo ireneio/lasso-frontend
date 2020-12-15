@@ -1,0 +1,30 @@
+.search {
+    display: flex;
+    border: none;
+    border-radius: 3px;
+    background-color: #fff;
+    &__input {
+      background-color: #fff;
+      padding: 11px 10px;
+      border-right: 1px solid #dddddd;
+      font-size: 14px;
+      &:focus {
+        outline: 1px solid #dddddd;
+      }
+    }
+    &__btn {
+      display: flex;
+      align-items: center;
+      padding: 7px;
+      cursor: pointer;
+    }
+    &__btnIcon {
+      width: 30px;
+      height: 30px;
+      background-color: #fff;
+      background-image: url(/search@3x.png);
+      background-size: contain;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+  }

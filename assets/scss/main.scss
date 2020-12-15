@@ -1,5 +1,20 @@
-@import './utils/fonts';
-@import './utils/variables';
+@import './utils/_fonts.scss';
+@import './utils/_variables.scss';
+
+@import './components/_box.scss';
+@import './components/_btn.scss';
+@import './components/_category.scss';
+@import './components/_circle.scss';
+@import './components/_input.scss';
+@import './components/_list.scss';
+@import './components/_mask.scss';
+@import './components/_modal.scss';
+@import './components/_search.scss';
+@import './components/_simpleTable.scss';
+@import './components/_table.scss';
+@import './components/_tip.scss';
+@import './components/_toolbar.scss';
+@import './components/_tooltip.scss';
 
 $STAYFUN_BLUE: #3c8dbc;
 

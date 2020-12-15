@@ -1,0 +1,115 @@
+.table {
+  width: 100%;
+  &__header {
+    background-color: #f4f8f9;
+    color: #959595;
+    font-size: 14px;
+    padding: 0 28px;
+    margin-bottom: 8px;
+  }
+  &__headerCell {
+    padding: 0 28px;
+    text-align: left;
+  }
+  &__divider {
+    height: 8px;
+    width: 100%;
+    background-color: #f4f8f9;
+  }
+  &__row {
+    border-radius: 3px;
+    background-color: #fff;
+    font-size: 12px;
+    &--selected {
+      border: 1px solid #e1a236;
+    }
+    &--selectable {
+      cursor: pointer;
+    }
+  }
+  &__cell {
+    padding: 26px 28px;
+    text-align: left;
+    margin-bottom: 4px;
+  }
+  &__cellCircle {
+    text-align: center;
+  }
+  &__footer {
+    display: flex;
+    margin-top: 15px;
+  }
+  &__pagination {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    font-size: 14px;
+  }
+  &__paginationBtnbox {
+    display: flex;
+  }
+  &__paginationBtn {
+    margin: 0 7px;
+    cursor: pointer;
+    &::before {
+      width: 14px;
+      height: 14px;
+      content: '';
+      display: block;
+      background-color: #fff;
+      border-top: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+    }
+    &--next {
+      &::before {
+        border-left: 7px solid #282828;
+      }
+    }
+    &--prev {
+      &::before {
+        border-right: 7px solid #282828;
+      }
+    }
+    &--disabledNext {
+      cursor: not-allowed;
+      &::before {
+        border-left: 7px solid #b8b8b8;
+      }
+    }
+    &--disabledPrev {
+      cursor: not-allowed;
+      &::before {
+        border-right: 7px solid #b8b8b8;
+      }
+    }
+  }
+  &__toolbar {
+    display: flex;
+  }
+}
+
+.tableBtn {
+  display: flex;
+  align-items: center;
+  margin-right: 42px;
+  color: #282828;
+  background-color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  &__icon {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-right: 1px;
+  }
+  &--iconSent {
+    background-image: url(/icon_sent@3x.png);
+  }
+  &--iconInvite {
+    background-image: url(/iocn_invite@3x.png);
+  }
+}

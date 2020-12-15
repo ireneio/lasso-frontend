@@ -1,0 +1,57 @@
+.inputWrapper {
+    &__row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: -15px;
+      margin-right: -15px;
+    }
+  }
+
+  .input {
+    flex: 0 0 50%;
+    padding: 0 15px;
+    &--block {
+      flex: 0 0 100%;
+    }
+    &__label {
+      font-size: 14px;
+      &--required {
+          &::before {
+          content: '*';
+          color: #e1a236;
+        }
+      }
+      &--checkbox {
+        margin-left: 9px;
+      }
+    }
+    &__input {
+      margin-bottom: 16px;
+    }
+    &__inputBox {
+      width: 100%;
+      font-size: 12px;
+      border: 1px solid #c7c7c7;
+      border-radius: 3px;
+      padding: 6px 8px;
+      margin-top: 4px;
+      &:focus {
+        outline: 1px solid #eee;
+      }
+    }
+    &__checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    &__multipleInputsBox {
+      display: flex;
+      align-items: center;
+    }
+    &__multipleInputs {
+      &--consequtive {
+        flex: 0 0 40%;
+        margin-left: 23px;
+      }
+    }
+  }
