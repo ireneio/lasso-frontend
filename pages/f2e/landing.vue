@@ -113,7 +113,8 @@ export default class f2eLanding extends Vue {
       !this.$route.query.type ||
       this.$route.query.type.toString() !== 'enabled'
     ) {
-      this.$router.push('/f2e/landing?type=enabled')
+      // @ts-ignore
+      this.$router.push(`/f2e/landing?type=enabled&InvitationKey=${decodeURIComponent(encodeURIComponent(this.$route.query.InvitationKey))}`)
     }
   }
 

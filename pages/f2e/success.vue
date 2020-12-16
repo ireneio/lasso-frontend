@@ -17,11 +17,7 @@ export default class f2eSuccess extends Vue {
 
   private created() {
     if (!this.$route.query.type || this.$route.query.type.toString() !== 'success') {
-      this.$router.push('/f2e')
-    } else {
-      // this.timer = setTimeout(() => {
-      //   this.$router.push('/f2e')
-      // }, 5000)
+      this.$router.push('/f2e?type=enabled')
     }
   }
 
@@ -35,8 +31,10 @@ export default class f2eSuccess extends Vue {
 .loading {
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
   &__warpUp {
-    background-image: url(/line_d.svg);
+    // background-color: #000;
+    background-image: url(/line_d@3x.png);
     width: 100vw;
     height: 20vh;
     background-size: cover;
@@ -44,7 +42,7 @@ export default class f2eSuccess extends Vue {
     background-position: center center;
   }
   &__warpDown {
-    background-image: url(/line_e.svg);
+    background-image: url(/line_e@3x.png);
     width: 100vw;
     height: 20vh;
     background-size: cover;

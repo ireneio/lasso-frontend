@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire" v-show="$route.query.type === 'enabled'">
+  <v-app id="inspire" v-show="$route.query.type === 'enabled' || $route.query.type === 'success'">
     <main>
       <nuxt />
     </main>
