@@ -169,7 +169,9 @@ export default class f2eIndex extends Vue {
         // error dialog
         console.log(e)
       } finally {
-        
+        setTimeout(() => {
+          this.$router.push('/f2e/success?type=success')
+        }, 800)
       }
     } else {
       setTimeout(() => {
