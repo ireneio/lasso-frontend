@@ -52,7 +52,7 @@ export default class f2eSuccess extends Vue {
     background-position: center center;
   }
   &__center {
-    background-image: url(/people.svg);
+    background-image: url(/people@3x.png);
     width: 80vw;
     margin-left: 10vw;
     margin-right: 10vw;
