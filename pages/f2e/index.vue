@@ -134,8 +134,12 @@ export default class f2eIndex extends Vue {
 
   private timer: null | number = 0
 
-  private get getInvitationKey(): any {
-    return this.$route.query.InvitationKey
+  private get getInvitationKey(): string {
+    // @ts-ignore
+    const uri : string = encodeURIComponent(this.$route.query.InvitationKey) || ''
+    // @ts-ignore
+    return decodeURIComponent(uri)
+    // return 'L1aMACAnnWCrNJoDrn53y0pdm6I/DwJOj3gCK6bYRDxaDZDyD8nNmjPFso79srd24g'
   }
 
   private get displayTime(): string {
@@ -285,7 +289,6 @@ export default class f2eIndex extends Vue {
     }
     try {
       const result = await this.sendGetAssessmentRequest()
-      // console.log(result)
 
       this.startTime = new Date()
 

@@ -99,9 +99,8 @@ export default class f2eLanding extends Vue {
       this.timer = null
       this.timer = setTimeout(() => {
         this.loading = false
-        this.$router.push(
-          '/f2e?type=enabled&InvitationKey=L1ZcMWBV81MpXjDSSKSySpqqGDKLoOz0EuUBp6aHVvO4bW6lntUw5ZlZPuHczjU0gP'
-        )
+        // @ts-ignore
+        this.$router.push(`/f2e?type=enabled&InvitationKey=${decodeURIComponent(encodeURIComponent(this.$route.query.InvitationKey))}`)
       }, 800)
     }
     
