@@ -77,7 +77,7 @@
           <td class="table__cell">
             <input type="checkbox" @change="handleCheck($event, row)">
           </td>
-          <td class="table__cell" @click="handleRowClick" v-for="(colValue, colKey) in row" :key="colKey" v-show="colKey !== 'SubjectId'">
+          <td class="table__cell" @click="handleRowClick" v-for="(colValue, colKey) in row" :key="colKey" v-show="colKey !== 'SubjectId' && colKey !== 'CATId'">
             <div v-if="colKey !== 'CAT' && colKey !== 'SubjectId'">{{ colValue }}</div>
             <div class="table__cellCircle" v-if="colKey === 'CAT' && colKey !== 'SubjectId'">
               <div class="circle"
