@@ -89,7 +89,7 @@
                 v-if="colValue === 9 || colValue === 99 || colValue === 2 || colValue === 3 || colValue === 4 || colValue === 0 || colValue === 1"
               >
               </div>
-              <div class="report" v-else @click="handleOpenReport"></div>
+              <div class="report" v-else @click="handleOpenReport(row)"></div>
             </div>
           </td>
           <td class="table__cell">
@@ -109,7 +109,7 @@
     </table>
     <div class="table__footer">
       <div class="table__pagination">
-        <div class="table__paginationText">1 - 30 列 (共1,200列)</div>
+        <div class="table__paginationText">1 - 30 列 (共 {{ tableData.length }} 列)</div>
         <div class="table__paginationBtnbox">
           <div class="table__paginationBtn table__paginationBtn--prev table__paginationBtn--disabledPrev" @click="handleUpdatePage(-1)"></div>
           <div class="table__paginationBtn table__paginationBtn--next" @click="handleUpdatePage(-1)"></div>
@@ -509,8 +509,8 @@ export default {
     handleRowClick() {
       this.toggleBasicDetailModal = true
     },
-    handleOpenReport() {
-      window.open('/sys/recruitment/report', '_blank')
+    handleOpenReport(row) {
+      window.open(`/sys/recruitment/report?SubjectId=${row.SubjectId}&AssessmentId=${row.CATId}`, '_blank')
     },
     async handleSendReport() {},
     handleSendInvitationMultiple() {
@@ -663,7 +663,8 @@ export default {
           Email: item.Email,
           Position: item.Position,
           Class: item.Class,
-          CAT: item.CAT.Status ? item.CAT.Status : 0
+          CAT: item.CAT.length ? item.CAT[0].Status ? item.CAT[0].Status : 0 : 0,
+          CATId: item.CAT.length ? item.CAT[0].AssessmentId ? item.CAT[0].AssessmentId : 0 : 0
         }
       })
     }

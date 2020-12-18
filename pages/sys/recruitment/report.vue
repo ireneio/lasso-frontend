@@ -446,61 +446,31 @@
               <thead class="simpleTable__header">
                 <tr>
                   <th class="simpleTable__headerCell">職能</th>
-                  <th class="simpleTable__headerCell">個人分數</th>
                   <th class="simpleTable__headerCell">
                     <div class="simpleTable__headerCellData">
-                      <div>圖表呈現</div>
-                      <div class="simpleTable__headerCellDataBar">1</div>
+                      <div class="simpleTable__headerCellDataBar simpleTable__headerCellDataBar--first">1</div>
                       <div class="simpleTable__headerCellDataBar">2</div>
                       <div class="simpleTable__headerCellDataBar">3</div>
                       <div class="simpleTable__headerCellDataBar">4</div>
                       <div class="simpleTable__headerCellDataBar">5</div>
                     </div>                     
                   </th>
+                  <th class="simpleTable__headerCell"></th>
                   <th class="simpleTable__headerCell">職能說明</th>
                 </tr>
               </thead>
               <div class="simpleTable__divider"></div>
-              <tbody class="simpleTable__body">
-                <tr class="simpleTable__row simpleTable__row--odd">
-                  <td class="simpleTable__col">創意思維</td>
-                  <td class="simpleTable__col">3</td>
-                  <td class="simpleTable__col">
-                    <div class="categoryProgBar categoryProgBar--long categoryProgBar--success"></div>
-                  </td>
-                  <td class="simpleTable__col">定義</td>
+              <tbody class="simpleTable__body" v-for="item in pageData.Categories" :key="item.CategoryCode">
+                <tr class="simpleTable__titleRow">
+                  <td class="simpleTable__titleCol" colspan="4">{{ item.Category }}</td>
                 </tr>
-                <tr class="simpleTable__row simpleTable__row--odd">
-                  <td class="simpleTable__col">邏輯分析</td>
-                  <td class="simpleTable__col">3</td>
+                <tr class="simpleTable__row simpleTable__row--odd" v-for="row in item.Dimensions" :key="row.DimensionCode">
+                  <td class="simpleTable__col">{{ row.Dimension }}</td>
                   <td class="simpleTable__col">
-                    <div class="categoryProgBar categoryProgBar--long categoryProgBar--success"></div>
+                    <div class="categoryProgBar categoryProgBar--long categoryProgBar--success" :class="`categoryProgBar--${Number(row.Scale) >= 4.5 ? 'success' : Number(row.Scale) >= 3 ? 'warning' : 'danger' }`"></div>
                   </td>
-                  <td class="simpleTable__col">定義</td>
-                </tr>
-                <tr class="simpleTable__row simpleTable__row--odd">
-                  <td class="simpleTable__col">邏輯分析</td>
-                  <td class="simpleTable__col">3</td>
-                  <td class="simpleTable__col">
-                    <div class="categoryProgBar categoryProgBar--long categoryProgBar--success"></div>
-                  </td>
-                  <td class="simpleTable__col">定義</td>
-                </tr>
-                <tr class="simpleTable__row simpleTable__row--odd">
-                  <td class="simpleTable__col">邏輯分析</td>
-                  <td class="simpleTable__col">3</td>
-                  <td class="simpleTable__col">
-                    <div class="categoryProgBar categoryProgBar--long categoryProgBar--success"></div>
-                  </td>
-                  <td class="simpleTable__col">定義</td>
-                </tr>
-                <tr class="simpleTable__row simpleTable__row--odd">
-                  <td class="simpleTable__col">邏輯分析</td>
-                  <td class="simpleTable__col">3</td>
-                  <td class="simpleTable__col">
-                    <div class="categoryProgBar categoryProgBar--long categoryProgBar--success"></div>
-                  </td>
-                  <td class="simpleTable__col">定義</td>
+                  <td class="simpleTable__col">{{ row.Scale.toFixed(1) }}</td>
+                  <td class="simpleTable__col">{{ row.Definition }}</td>
                 </tr>
               </tbody>
           </table>
@@ -509,7 +479,7 @@
     </div>
     <div class="modal__footer">
       <div class="modal__footerToolbar">
-        <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="toggleViewReport = false">確定</div>
+        <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="handleCloseWindow">確定</div>
       </div>
     </div>
   </div>
@@ -604,9 +574,9 @@ export default {
           },
           ticks: {
             beginAtZero: true,
-            min: 0,
-            max: 100,
-            stepSize: 25
+            min: 1,
+            max: 6,
+            stepSize: 1
           },
           pointLabels: {
             fontSize: 15
@@ -633,10 +603,14 @@ export default {
         datasets: [{
           label: "",
           backgroundColor: "rgba(200,0,0,0.2)",
-          data: [65, 75, 70, 80, 60, 80],
+          data: [1.5, 2, 3, 4, 5, 6],
           pointRadius: 6,
           borderWidth: 1
         }]
+      }
+      if(this.pageData.Categories) {
+        data.labels = this.pageData.Categories.map(item => item.Category)
+        data.datasets[0].data = this.pageData.Categories.map(item => item.Scale)
       }
       const myRadarChart = new Chart(ctx, {
         type: 'radar',
@@ -644,13 +618,16 @@ export default {
         options
       });
     },
+    handleCloseWindow() {
+      window.close()
+    },
     async sendGetAssessmentResultRequest() {
       try {
         const requestBody = {
           Conditions: [
             {
-              SubjectId: this.$route.params.subjectId,
-              AssessmentId: this.$route.params.assessmentId
+              SubjectId: this.$route.query.SubjectId,
+              AssessmentId: this.$route.query.AssessmentId
             }
           ]
         }
@@ -662,9 +639,11 @@ export default {
     }
   },
   async created() {
-    // const result = await this.sendGetAssessmentResultRequest()
-    // this.pageData = result.Results[0]
-    // this.rowCount = result.Results.RowCount
+    const result = await this.sendGetAssessmentResultRequest()
+    if(this.$route.query.SubjectId.toString() !== 'undefined' && this.$route.query.AssessmentId.toString() !== 'undefined') {
+      this.pageData = result.Results ? result.Results[0] : []
+      this.rowCount = result.Results ? result.Results.RowCount : 0
+    }
   },
   mounted() {
     this.drawChart()

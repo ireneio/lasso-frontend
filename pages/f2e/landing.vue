@@ -42,22 +42,12 @@ export default class f2eLanding extends Vue {
 
   private privacy: boolean = false
 
-  // private get getInvitationKey(): string {
-  //   // @ts-ignore
-  //   const uri : string = encodeURIComponent(this.$route.query.InvitationKey) || ''
-  //   // @ts-ignore
-  //   return decodeURIComponent(uri)
-  //   // return 'L1aMACAnnWCrNJoDrn53y0pdm6I/DwJOj3gCK6bYRDxaDZDyD8nNmjPFso79srd24g'
-  // }
-
   private handleStart(): void {
     if(this.privacy) {
       this.loading = true
       this.timer = null
       this.timer = setTimeout(() => {
         this.loading = false
-        // @ts-ignore
-        // this.$router.push(`/f2e?type=enabled&InvitationKey=${this.$route.query.InvitationKey}}`)
         const key : string = this.$route.query.InvitationKey.toString()
         this.$router.push({ name: 'f2e', params: { InvitationKey:  key }, query: { type: 'enabled' } })
       }, 800)

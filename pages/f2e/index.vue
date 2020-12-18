@@ -139,7 +139,6 @@ export default class f2eIndex extends Vue {
     const uri : string = encodeURIComponent(this.$route.params.InvitationKey) || ''
     // @ts-ignore
     return decodeURIComponent(uri)
-    // return 'L1aMACAnnWCrNJoDrn53y0pdm6I/DwJOj3gCK6bYRDxaDZDyD8nNmjPFso79srd24g'
   }
 
   private get displayTime(): string {
