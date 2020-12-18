@@ -13,7 +13,7 @@
       <div class="modal__bodyTitle">當前報告 : 未來員工職能測評</div>
       <div class="modal__section">
         <div class="modal__sectionTitle">
-          <div class="modal__sectionTitleMainText">人員資料 ( 5 )</div>
+          <div class="modal__sectionTitleMainText">人員資料 ( {{rowCount}} )</div>
         </div>
         <div class="inputWrapper">
           <div class="inputWrapper__row">
@@ -36,31 +36,17 @@
               <div class="simpleTable__divider"></div>
               <tbody class="simpleTable__body">
                 <tr class="simpleTable__row simpleTable__row--odd">
-                  <td class="simpleTable__col">王昭棟</td>
-                  <td class="simpleTable__col">在職</td>
-                  <td class="simpleTable__col">A008786</td>
-                  <td class="simpleTable__col">Wanddundun@gmail.com</td>
-                  <td class="simpleTable__col">碩士</td>
-                  <td class="simpleTable__col">產品經理</td>
-                  <td class="simpleTable__col">專案管理</td>
-                  <td class="simpleTable__col">中階</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].Name === null ? '' : pageData.Subjects.Name : '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].Identity === 1 ? '在職' : '非在職' : '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].EmployeeNumber === null ? '' : pageData.Subjects.EmployeeNumber : '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].Email === null ? '' : pageData.Subjects.Email : '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].Graduation === null ? '' : pageData.Subjects.Graduation : '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].Position === null ? '' : pageData.Subjects.Position : '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].Profession === null ? '' : pageData.Subjects.Profession : '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].EmployeeNumber === null ? '' : pageData.Subjects.EmployeeNumber : '' }}</td>
                   <td class="simpleTable__col">台北</td>
-                  <td class="simpleTable__col">台北研發一部</td>
-                  <td class="simpleTable__col">職能測評0702</td>
-                  <td class="simpleTable__col">></td>
-                </tr>
-                <tr class="simpleTable__row simpleTable__row--even">
-                    <td class="simpleTable__col">王昭棟</td>
-                  <td class="simpleTable__col">在職</td>
-                  <td class="simpleTable__col">A008786</td>
-                  <td class="simpleTable__col">Wanddundun@gmail.com</td>
-                  <td class="simpleTable__col">碩士</td>
-                  <td class="simpleTable__col">產品經理</td>
-                  <td class="simpleTable__col">專案管理</td>
-                  <td class="simpleTable__col">中階</td>
-                  <td class="simpleTable__col">台北</td>
-                  <td class="simpleTable__col">台北研發一部</td>
-                  <td class="simpleTable__col">職能測評0702</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].Department === null ? '' : pageData.Subjects.Department: '' }}</td>
+                  <td class="simpleTable__col">{{ pageData.Subjects.length ? pageData.Subjects[0].CAT.length > 0 ? 'CAT' : '' : '' }}</td>
                   <td class="simpleTable__col">></td>
                 </tr>
               </tbody>
@@ -68,15 +54,21 @@
           </div>         
         </div>
       </div>
-      <div class="modal__banner">
-        <div class="modal__bannerIcon"></div>
-        <div class="modal__bannerText">
-          作答時間：整體作答所花時間是否異常。謹慎認真：是否仔細看題作答。 <br />
-          印象管理：是否刻意想展現良好形象。作答傾向：是否太過中庸或極端。
-        </div>
-      </div>
       <div class="modal__section model__section--consequtive">
         <div class="modal__sectionTitle">報告可信度指標</div>
+        <div class="bigBoxWraper">
+          <div class="">
+          <div class="categoryProgBar__textTitle">報告可性度: 
+            <span class="categoryProgBar__text categoryProgBar__text--success" 
+                  :style="{ color: pageData.Subjects.length ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">{{ pageData.Subjects.length ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '高於平均值' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '平均值' : '低於平均值' : '低於平均值'}}
+            </span>
+          </div>
+          <div 
+            class="categoryProgBar categoryProgBar__report" 
+            :style="{ 'background-color': pageData.Subjects.length ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">
+            <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.CurrentProfessionCompetency.Competency) / 217).toString() : '200'}` + 'px'}"></div>
+          </div>
+        </div>
         <div class="inputWrapper boxWrapper">
           <div class="modal__box">
             <div class="modal__boxTitle">報告可信度</div>
@@ -98,23 +90,32 @@
             <div class="modal__boxTitle">作答傾向</div>
             <div class="modal__boxContent">中</div>
           </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal__banner">
+        <div class="modal__bannerIcon"></div>
+        <div class="modal__bannerText">
+          作答時間：整體作答所花時間是否異常。謹慎認真：是否仔細看題作答。 <br />
+          印象管理：是否刻意想展現良好形象。作答傾向：是否太過中庸或極端。
         </div>
       </div>
       <div class="modal__section model__section--consequtive">
         <div class="modal__sectionTitle">職能匹配九宮格</div>
         <div class="divideWrapper">
           <div class="modal__graph">
-            <div class="modal__graphNumber">79</div>
+            <div class="modal__graphNumber" :style="{ color: pageData.Subjects.length ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">{{ pageData.Subjects.length ? (parseInt(pageData.CurrentProfessionCompetency.Competency)).toString() : '0' }}</div>
             <div id="graph" style="height: 150px; width: 150px;"></div>
             <div class="modal__graphDesc">
-              <div class="modal__graphDescTitle modal__graphDescTitle--success">高於平均值</div>
-              <div class="modal__graphDescBody">當前對比職系：專案管理</div>
+              <div class="modal__graphDescTitle modal__graphDescTitle--success" :style="{ color: pageData.Subjects.length ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">{{ pageData.Subjects.length ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '高於平均值' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '平均值' : '低於平均值' : '低於平均值' }}</div>
+              <div class="modal__graphDescBody">當前對比職系：{{ pageData.Subjects.length ? pageData.CurrentProfessionCompetency.Profession: 'Placeholder' }}</div>
             </div>
           </div>
           <table class="simpleTable simpleTable--small">
               <thead class="simpleTable__header">
                 <tr>
-                  <th class="simpleTable__headerCell">當前職系：專案管理</th>
+                  <th class="simpleTable__headerCell">當前職系：{{ pageData.Subjects.length ? pageData.CurrentProfessionCompetency.Profession: 'Placeholder' }}</th>
                   <th class="simpleTable__headerCell">重要</th>
                   <th class="simpleTable__headerCell">普通</th>
                   <th class="simpleTable__headerCell">不重要</th>
@@ -124,21 +125,21 @@
               <tbody class="simpleTable__body">
                 <tr class="simpleTable__row simpleTable__row--even">
                   <td class="simpleTable__col">優勢</td>
-                  <td class="simpleTable__col">溝通</td>
-                  <td class="simpleTable__col">溝通</td>
-                  <td class="simpleTable__col">溝通</td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(0)"></td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(1)"></td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(2)"></td>
                 </tr>
                   <tr class="simpleTable__row simpleTable__row--even">
-                  <td class="simpleTable__col">優勢</td>
-                  <td class="simpleTable__col">溝通</td>
-                  <td class="simpleTable__col">溝通</td>
-                  <td class="simpleTable__col">溝通</td>
+                    <td class="simpleTable__col">普通</td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(3)"></td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(4)"></td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(5)"></td>
                 </tr>
                   <tr class="simpleTable__row simpleTable__row--even">
-                  <td class="simpleTable__col">優勢</td>
-                  <td class="simpleTable__col">溝通</td>
-                  <td class="simpleTable__col">溝通</td>
-                  <td class="simpleTable__col">溝通</td>
+                  <td class="simpleTable__col">劣勢</td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(6)"></td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(7)"></td>
+                  <td class="simpleTable__col" v-html="nineBoxItem(8)"></td>
                 </tr>
               </tbody>
           </table>
@@ -149,85 +150,85 @@
         <div class="modal__sectionSubtitle">推薦職位Top5</div>
         <div class="inputWrapper boxWrapper">
           <div class="modal__box">
-            <div class="modal__boxTitle">報告可信度</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.TopProfessionCompetency[0].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[0].Competency) > 80 ? 'success' : parseInt(pageData.TopProfessionCompetency[0].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[0].Competency) : 0 }}</span>分
               </div>
             </div>
           </div>
           <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">作答時間</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.TopProfessionCompetency[1].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[1].Competency) > 80 ? 'success' : parseInt(pageData.TopProfessionCompetency[1].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[1].Competency) : 3 }}</span>分
               </div>
             </div>
           </div>
           <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">謹慎認真</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.TopProfessionCompetency[2].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[2].Competency) > 80 ? 'success' : parseInt(pageData.TopProfessionCompetency[2].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[2].Competency) : 0 }}</span>分
               </div>
             </div>
           </div>
           <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">印象管理</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.TopProfessionCompetency[3].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[3].Competency) > 80 ? 'success' : parseInt(pageData.TopProfessionCompetency[3].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.TopProfessionCompetency[3].Competency) : 3 }}</span>分
               </div>
             </div>
-          </div>
-            <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">作答傾向</div>
+          </div>        
+          <div class="modal__box modal__box--consequtive">
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.Strengths[4].Dimension : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.Strengths[4].Competency) > 80 ? 'success' : parseInt(pageData.Strengths[4].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.Strengths[4].Competency) : 3 }}</span>分
               </div>
             </div>
           </div>
         </div>
-        <div class="modal__sectionSubtitle modal__sectionSubtitle--consequtive">推薦職位Top5</div>
+        <div class="modal__sectionSubtitle modal__sectionSubtitle--consequtive">不適職位Top5</div>
         <div class="inputWrapper boxWrapper">
           <div class="modal__box">
-            <div class="modal__boxTitle">報告可信度</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.BottomProfessionCompetency[0].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[0].Competency) > 80 ? 'success' : parseInt(pageData.BottomProfessionCompetency[0].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[0].Competency) : 0 }}</span>分
               </div>
             </div>
           </div>
           <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">作答時間</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.BottomProfessionCompetency[1].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[1].Competency) > 80 ? 'success' : parseInt(pageData.BottomProfessionCompetency[1].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[1].Competency) : 3 }}</span>分
               </div>
             </div>
           </div>
           <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">謹慎認真</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.BottomProfessionCompetency[2].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[2].Competency) > 80 ? 'success' : parseInt(pageData.BottomProfessionCompetency[2].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[2].Competency) : 0 }}</span>分
               </div>
             </div>
           </div>
           <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">印象管理</div>
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.BottomProfessionCompetency[3].Profession : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[3].Competency) > 80 ? 'success' : parseInt(pageData.BottomProfessionCompetency[3].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[3].Competency) : 3 }}</span>分
               </div>
             </div>
-          </div>
-            <div class="modal__box modal__box--consequtive">
-            <div class="modal__boxTitle">作答傾向</div>
+          </div>        
+          <div class="modal__box modal__box--consequtive">
+            <div class="modal__boxTitle">{{ pageData.Subjects.length ? pageData.BottomProfessionCompetency[4].Dimension : 'Placeholder' }}</div>
             <div class="modal__boxContent">
               <div>
-                <span class="modal__boxContentHighlight modal__boxContentHighlight--success">92</span>分
+                <span class="modal__boxContentHighlight" :class="`modal__boxContentHighlight--${pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[4].Competency) > 80 ? 'success' : parseInt(pageData.BottomProfessionCompetency[4].Competency) >= 60 ? 'warning' : 'danger' : 'danger' }`">{{ pageData.Subjects.length ? parseInt(pageData.BottomProfessionCompetency[4].Competency) : 3 }}</span>分
               </div>
             </div>
           </div>
@@ -238,103 +239,171 @@
         <div class="categoryDivider">
           <div class="categoryBox">
             <div class="categoryTitle">
-              <div class="catrgoryTitleText">創新思維</div>
-              <div class="categoryProgBar categoryProgBar--success"></div>
-              <div class="categoryNumber">90</div>
+              <div class="catrgoryTitleText">{{ pageData.Subjects.length ? pageData.Strengths[0].Dimension : 'Placeholder'}}</div>
+              <div class="categoryProgBar" :class="`categoryProgBar--${pageData.Subjects.length ? parseInt(pageData.Strengths[0].PR) > 80 ? 'success' : parseInt(pageData.Strengths[0].PR) >= 60 ? 'warning' : 'danger' : 'danger' }`">
+                <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.Strengths[0].PR) / 217).toString() : '100'}` + 'px'}"></div>
+              </div>
+              <div class="categoryNumber">{{ pageData.Subjects.length ? pageData.Strengths[0].PR : '00'}}</div>
             </div>
             <div class="categoryBody">
-              <div class="categoryBody__title">定義</div>
+              <div class="categoryBody__title">{{ pageData.Subjects.length ? pageData.Strengths[0].Definition : 'Placeholder' }}</div>
               <div>
-                能掌握客戶的需求，提供便捷與高品質的服務，以贏得客 <br /> 戶 
-                的認同、滿意、忠誠與口碑，進而與客戶建立場遠與互利的 
-                關係。
+                {{ pageData.Subjects.length ? pageData.Strengths[0].Definition : 'Placeholder' }}
               </div>
             </div>
             <div class="categoryFooter">
               <div class="categoryBody__title">面談問題參考</div>
               <div>
-                如果你在電梯裡碰到一位大客戶，你想了解某一件產品，<br /> 你 
-                的任務是想辦法在電梯達到目的樓層前，把產品推銷給  <br /> 他。
-                再30秒鐘內，必須要清楚表達你的想法，還要讓客戶認同你 
-                的產品，你會如何做？
+                {{ recommendation(0) }}
               </div>
               <div class="categoryFooter__pagination">
                 <div class="categoryFooter__prev">&lt;&nbsp;</div>
-                <div>2 / 8</div>
+                <div>{{ currentPages[0][0] }} / {{ currentPages[0][1] }}</div>
                 <div class="categoryFooter__next">&nbsp;&gt;</div>
               </div>
             </div>
           </div>
           <div class="categoryBox categoryBox--consequtive">
             <div class="categoryTitle">
-              <div class="catrgoryTitleText">創新思維</div>
-              <div class="categoryProgBar categoryProgBar--success"></div>
-              <div class="categoryNumber">90</div>
+              <div class="catrgoryTitleText">{{ pageData.Subjects.length ? pageData.Strengths[1].Dimension : 'Placeholder'}}</div>
+              <div class="categoryProgBar" :class="`categoryProgBar--${pageData.Subjects.length ? parseInt(pageData.Strengths[1].PR) > 80 ? 'success' : parseInt(pageData.Strengths[1].PR) >= 60 ? 'warning' : 'danger' : 'danger' }`">
+                <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.Strengths[1].PR) / 217).toString() : '100'}` + 'px'}"></div>
+              </div>
+              <div class="categoryNumber">{{ pageData.Subjects.length ? pageData.Strengths[1].PR : '00'}}</div>
             </div>
             <div class="categoryBody">
-              <div class="categoryBody__title">定義</div>
+              <div class="categoryBody__title">{{ pageData.Subjects.length ? pageData.Strengths[1].Definition : 'Placeholder' }}</div>
               <div>
-                能掌握客戶的需求，提供便捷與高品質的服務，以贏得客 <br /> 戶 
-                的認同、滿意、忠誠與口碑，進而與客戶建立場遠與互利的 
-                關係。
+                {{ pageData.Subjects.length ? pageData.Strengths[1].Definition : 'Placeholder' }}
               </div>
             </div>
             <div class="categoryFooter">
               <div class="categoryBody__title">面談問題參考</div>
               <div>
-                如果你在電梯裡碰到一位大客戶，你想了解某一件產品，<br /> 你 
-                的任務是想辦法在電梯達到目的樓層前，把產品推銷給  <br /> 他。
-                再30秒鐘內，必須要清楚表達你的想法，還要讓客戶認同你 
-                的產品，你會如何做？
+                {{ recommendation(0) }}
               </div>
               <div class="categoryFooter__pagination">
                 <div class="categoryFooter__prev">&lt;&nbsp;</div>
-                <div>2 / 8</div>
+                <div>{{ currentPages[0][0] }} / {{ currentPages[0][1] }}</div>
                 <div class="categoryFooter__next">&nbsp;&gt;</div>
               </div>
             </div>
           </div>
           <div class="categoryBox categoryBox--consequtive">
-          <div class="categoryTitle">
-            <div class="catrgoryTitleText">創新思維</div>
-            <div class="categoryProgBar categoryProgBar--success"></div>
-            <div class="categoryNumber">90</div>
-          </div>
-          <div class="categoryBody">
-            <div class="categoryBody__title">定義</div>
-            <div>
-              能掌握客戶的需求，提供便捷與高品質的服務，以贏得客 <br /> 戶 
-              的認同、滿意、忠誠與口碑，進而與客戶建立場遠與互利的 
-              關係。
+            <div class="categoryTitle">
+              <div class="catrgoryTitleText">{{ pageData.Subjects.length ? pageData.Strengths[2].Dimension : 'Placeholder'}}</div>
+              <div class="categoryProgBar" :class="`categoryProgBar--${pageData.Subjects.length ? parseInt(pageData.Strengths[2].PR) > 80 ? 'success' : parseInt(pageData.Strengths[2].PR) >= 60 ? 'warning' : 'danger' : 'danger' }`">
+                <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.Strengths[2].PR) / 217).toString() : '100'}` + 'px'}"></div>
+              </div>
+              <div class="categoryNumber">{{ pageData.Subjects.length ? pageData.Strengths[2].PR : '00'}}</div>
             </div>
-          </div>
-          <div class="categoryFooter">
-            <div class="categoryBody__title">面談問題參考</div>
-            <div>
-              如果你在電梯裡碰到一位大客戶，你想了解某一件產品，<br /> 你 
-              的任務是想辦法在電梯達到目的樓層前，把產品推銷給  <br /> 他。
-              再30秒鐘內，必須要清楚表達你的想法，還要讓客戶認同你 
-              的產品，你會如何做？
+            <div class="categoryBody">
+              <div class="categoryBody__title">{{ pageData.Subjects.length ? pageData.Strengths[2].Definition : 'Placeholder' }}</div>
+              <div>
+                {{ pageData.Subjects.length ? pageData.Strengths[2].Definition : 'Placeholder' }}
+              </div>
             </div>
-            <div class="categoryFooter__pagination">
-              <div class="categoryFooter__prev">&lt;&nbsp;</div>
-              <div>2 / 8</div>
-              <div class="categoryFooter__next">&nbsp;&gt;</div>
+            <div class="categoryFooter">
+              <div class="categoryBody__title">面談問題參考</div>
+              <div>
+                {{ recommendation(0) }}
+              </div>
+              <div class="categoryFooter__pagination">
+                <div class="categoryFooter__prev">&lt;&nbsp;</div>
+                <div>{{ currentPages[0][0] }} / {{ currentPages[0][1] }}</div>
+                <div class="categoryFooter__next">&nbsp;&gt;</div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="modal__section model__section--consequtive">
+        <div class="modal__sectionTitle">劣勢職能</div>
+        <div class="categoryDivider">
+          <div class="categoryBox">
+            <div class="categoryTitle">
+              <div class="catrgoryTitleText">{{ pageData.Subjects.length ? pageData.Weaknesses[0].Dimension : 'Placeholder'}}</div>
+              <div class="categoryProgBar" :class="`categoryProgBar--${pageData.Subjects.length ? parseInt(pageData.Weaknesses[0].PR) > 80 ? 'success' : parseInt(pageData.Weaknesses[0].PR) >= 60 ? 'warning' : 'danger' : 'danger' }`">
+                <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.Weaknesses[0].PR) / 217).toString() : '100'}` + 'px'}"></div>
+              </div>
+              <div class="categoryNumber">{{ pageData.Subjects.length ? pageData.Weaknesses[0].PR : '00'}}</div>
+            </div>
+            <div class="categoryBody">
+              <div class="categoryBody__title">{{ pageData.Subjects.length ? pageData.Weaknesses[0].Definition : 'Placeholder' }}</div>
+              <div>
+                {{ pageData.Subjects.length ? pageData.Weaknesses[0].Definition : 'Placeholder' }}
+              </div>
+            </div>
+            <div class="categoryFooter">
+              <div class="categoryBody__title">面談問題參考</div>
+              <div>
+                {{ recommendation(0) }}
+              </div>
+              <div class="categoryFooter__pagination">
+                <div class="categoryFooter__prev">&lt;&nbsp;</div>
+                <div>{{ currentPages[0][0] }} / {{ currentPages[0][1] }}</div>
+                <div class="categoryFooter__next">&nbsp;&gt;</div>
+              </div>
+            </div>
+          </div>
+          <div class="categoryBox categoryBox--consequtive">
+            <div class="categoryTitle">
+              <div class="catrgoryTitleText">{{ pageData.Subjects.length ? pageData.Weaknesses[1].Dimension : 'Placeholder'}}</div>
+              <div class="categoryProgBar" :class="`categoryProgBar--${pageData.Subjects.length ? parseInt(pageData.Weaknesses[1].PR) > 80 ? 'success' : parseInt(pageData.Weaknesses[1].PR) >= 60 ? 'warning' : 'danger' : 'danger' }`">
+                <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.Weaknesses[1].PR) / 217).toString() : '100'}` + 'px'}"></div>
+              </div>
+              <div class="categoryNumber">{{ pageData.Subjects.length ? pageData.Weaknesses[1].PR : '00'}}</div>
+            </div>
+            <div class="categoryBody">
+              <div class="categoryBody__title">{{ pageData.Subjects.length ? pageData.Weaknesses[1].Definition : 'Placeholder' }}</div>
+              <div>
+                {{ pageData.Subjects.length ? pageData.Weaknesses[1].Definition : 'Placeholder' }}
+              </div>
+            </div>
+            <div class="categoryFooter">
+              <div class="categoryBody__title">面談問題參考</div>
+              <div>
+                {{ recommendation(0) }}
+              </div>
+              <div class="categoryFooter__pagination">
+                <div class="categoryFooter__prev">&lt;&nbsp;</div>
+                <div>{{ currentPages[0][0] }} / {{ currentPages[0][1] }}</div>
+                <div class="categoryFooter__next">&nbsp;&gt;</div>
+              </div>
+            </div>
+          </div>
+          <div class="categoryBox categoryBox--consequtive">
+            <div class="categoryTitle">
+              <div class="catrgoryTitleText">{{ pageData.Subjects.length ? pageData.Weaknesses[2].Dimension : 'Placeholder'}}</div>
+              <div class="categoryProgBar" :class="`categoryProgBar--${pageData.Subjects.length ? parseInt(pageData.Weaknesses[2].PR) > 80 ? 'success' : parseInt(pageData.Weaknesses[2].PR) >= 60 ? 'warning' : 'danger' : 'danger' }`">
+                <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.Weaknesses[2].PR) / 217).toString() : '100'}` + 'px'}"></div>
+              </div>
+              <div class="categoryNumber">{{ pageData.Subjects.length ? pageData.Weaknesses[2].PR : '00'}}</div>
+            </div>
+            <div class="categoryBody">
+              <div class="categoryBody__title">{{ pageData.Subjects.length ? pageData.Weaknesses[2].Definition : 'Placeholder' }}</div>
+              <div>
+                {{ pageData.Subjects.length ? pageData.Weaknesses[2].Definition : 'Placeholder' }}
+              </div>
+            </div>
+            <div class="categoryFooter">
+              <div class="categoryBody__title">面談問題參考</div>
+              <div>
+                {{ recommendation(0) }}
+              </div>
+              <div class="categoryFooter__pagination">
+                <div class="categoryFooter__prev">&lt;&nbsp;</div>
+                <div>{{ currentPages[0][0] }} / {{ currentPages[0][1] }}</div>
+                <div class="categoryFooter__next">&nbsp;&gt;</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal__section model__section--consequtive">
         <div class="modal__sectionTitle">分析與劣勢建議</div>
         <div class="inputWrapper boxWrapper">
-          <div class="modal__pp">
-            文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊
-  文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊
-  文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊
-
-  文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊文字區塊
-          </div>
+          <div class="modal__pp">{{ advice || 'Placeholder' }}</div>
         </div>
       </div>
     </div>
@@ -344,38 +413,26 @@
           <canvas id="radar"></canvas>
         </div>
         <div class="modal__radarGraphDesc">
-          <div class="modal__radarGraphDescTitle">優勢職能</div>
-          <div class="modal__radarGraphDescBody">
-            <div class="categoryTitle">
-              <div class="catrgoryTitleText">創新思維</div>
-              <div class="categoryProgBar categoryProgBar--success"></div>
-              <div class="categoryNumber">90</div>
-            </div>
-            <div class="categoryTitle">
-              <div class="catrgoryTitleText">解決方案</div>
-              <div class="categoryProgBar categoryProgBar--success"></div>
-              <div class="categoryNumber">90</div>
-            </div>
-            <div class="categoryTitle">
-              <div class="catrgoryTitleText">邏輯分析</div>
-              <div class="categoryProgBar categoryProgBar--success"></div>
-              <div class="categoryNumber">90</div>
+          <div class="modal__radarGraphDescBody" v-if="pageData.Categories">
+            <div class="categoryTitle" v-for="item in pageData.Categories" :key="item.CategoryCode">
+              <div class="catrgoryTitleText">{{ item.Category }}</div>
+              <div class="categoryProgBar" :class="`categoryProgBar--${item > 80 ? 'success' : item >= 60 ? 'warning' : 'danger'}`"></div>
+              <div class="categoryNumber">{{ item.Scale }}</div>
             </div>
           </div>
-          <div class="modal__radarGraphDescTitle modal__radarGraphDescTitle--consequtive">劣勢職能</div>
-          <div class="modal__radarGraphDescBody">
+          <div class="modal__radarGraphDescBody" v-else>
             <div class="categoryTitle">
-              <div class="catrgoryTitleText">關係建立</div>
+              <div class="catrgoryTitleText">Placeholder</div>
               <div class="categoryProgBar categoryProgBar--success"></div>
               <div class="categoryNumber">90</div>
             </div>
             <div class="categoryTitle">
-              <div class="catrgoryTitleText">客戶導向</div>
+              <div class="catrgoryTitleText">Placeholder</div>
               <div class="categoryProgBar categoryProgBar--success"></div>
               <div class="categoryNumber">90</div>
             </div>
             <div class="categoryTitle">
-              <div class="catrgoryTitleText">溝通表達</div>
+              <div class="catrgoryTitleText">Placeholder</div>
               <div class="categoryProgBar categoryProgBar--success"></div>
               <div class="categoryNumber">90</div>
             </div>
@@ -459,10 +516,61 @@
 </template>
 
 <script>
+import { $axios } from '~/utils/api'
+
 export default {
   data() {
     return {
-      modalView: 0
+      modalView: 0,
+      pageData: {
+        Subjects: []
+      },
+      rowCount: 0,
+      currentPages: {
+        0: [1, 1],
+        1: [1, 1],
+        2: [1, 1],
+        3: [1, 1],
+        4: [1, 1],
+        5: [1, 1],
+      }
+    }
+  },
+  computed: {
+    nineBoxItem(index) {
+      return (index) => {
+        if(this.pageData.Subjects.length > 0) {
+          let str = ''
+          this.pageData.CurrentProfessionCompetency.NineBox[index].Dimensions.forEach(item => {
+            str += item + '<br />' 
+          })
+          return str
+        } else {
+          return 'Placeholder'
+        }
+      }
+    },
+    advice() {
+      let str = ''
+      if(this.pageData.Subjects.length) {
+        this.pageData.Advice.forEach(item => {
+        str += item
+        str += '<br />'
+       })
+      }
+      return str
+    },
+    recommendation(index) {
+      return (index) => {
+        if(this.pageData.Subjects.length > 0) {
+          this.pageData.Strengths[index].QuestionsForInterview.forEach((item, j, array) => {
+            this.currentPages[index][1] = array.length
+          })
+          return this.pageData.Strengths[index].QuestionsForInterview
+        } else {
+          return 'Placeholder'
+        }
+      }
     }
   },
   methods: {
@@ -475,10 +583,8 @@ export default {
           startAngle: 60,
           innerRadius: 55,
           dataPoints: [
-            { y: 67, label: "", color: "#6d9053" },
-            { y: 28, label: "", color: "#f5b537" },
-            { y: 10, label: "", color: "#bc5d5d" },
-            { y: 10, label: "", color: "#eee" }
+            { y: parseInt(this.pageData.CurrentProfessionCompetency ? this.pageData.CurrentProfessionCompetency.Competency : 0), label: "", color: this.pageData.Subjects.length ? parseInt(this.pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(this.pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' },
+            { y: parseInt(this.pageData.CurrentProfessionCompetency ? 100 - parseInt(this.pageData.CurrentProfessionCompetency.Competency) : 100), color: '#f4f8f9' }
           ]
         }]
       });
@@ -537,7 +643,28 @@ export default {
         data,
         options
       });
+    },
+    async sendGetAssessmentResultRequest() {
+      try {
+        const requestBody = {
+          Conditions: [
+            {
+              SubjectId: this.$route.params.subjectId,
+              AssessmentId: this.$route.params.assessmentId
+            }
+          ]
+        }
+        const result = await $axios.post('/Assessment/GetAssessmentResult', requestBody)
+        return result
+      } catch(e) {
+        console.log(e)
+      }
     }
+  },
+  async created() {
+    // const result = await this.sendGetAssessmentResultRequest()
+    // this.pageData = result.Results[0]
+    // this.rowCount = result.Results.RowCount
   },
   mounted() {
     this.drawChart()

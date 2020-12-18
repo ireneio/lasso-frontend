@@ -136,7 +136,7 @@ export default class f2eIndex extends Vue {
 
   private get getInvitationKey(): string {
     // @ts-ignore
-    const uri : string = encodeURIComponent(this.$route.query.InvitationKey) || ''
+    const uri : string = encodeURIComponent(this.$route.params.InvitationKey) || ''
     // @ts-ignore
     return decodeURIComponent(uri)
     // return 'L1aMACAnnWCrNJoDrn53y0pdm6I/DwJOj3gCK6bYRDxaDZDyD8nNmjPFso79srd24g'
@@ -287,7 +287,8 @@ export default class f2eIndex extends Vue {
 
   private async created() {
     if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled') {
-      this.$router.push('/f2e/landing?type=enabled')
+      // @ts-ignore
+      this.$router.push(`/f2e/landing?type=enabled&InvitationKey=${this.$route.query.InvitationKey}`)
     }
     try {
       const result = await this.sendGetAssessmentRequest()

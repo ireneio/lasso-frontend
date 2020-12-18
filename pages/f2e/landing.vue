@@ -2,57 +2,6 @@
   <div>
     <div class="wrapper" v-show="!loading">
       <div class="logo"></div>
-      <!-- <div class="titleBox">
-        <div class="titleBox__name">Kin Lau,</div>
-        <div class="titleBox__desc">
-          you are invited to conduct a web survey.
-        </div>
-        <div class="titleBox__footer">by MAYO Human Capital Inc.</div>
-      </div> -->
-      <!-- <div class="line line1"></div> -->
-      <!-- <div class="prologue">
-        <div class="prologuePp">
-          The company is conducting a research study on Career Appraisal
-          Potential Personality (CAPP). Your input to this survey will help us
-          better assist our research study.
-          <br />
-          <br />
-          We sincerely value your participation. <br />
-          Please keep in mind, an estimate of approximately
-          <strong>20 to 25 minutes</strong> to this survey is designed.
-        </div>
-      </div> -->
-      <!-- <div class="line line2"></div> -->
-      <!-- <section class="section">
-        <div class="section__box section__box1">
-          <div class="section__icon section__icon1"></div>
-          <div class="section__desc">
-            This survey is set at maximum of 25 minutes. The session of survey
-            will end after its maximum allotted time.
-          </div>
-        </div>
-        <div class="section__box">
-          <div class="section__icon section__icon2"></div>
-          <div class="section__desc">
-            Please answer each questionnaire based on the subject states your
-            personal reaction to the actual situation.
-          </div>
-        </div>
-        <div class="section__box">
-          <div class="section__icon section__icon3"></div>
-          <div class="section__desc">
-            We are truly value your input and time. Please answer the
-            questionnaires truthfully of which the survey results is based upon.
-          </div>
-        </div>
-        <div class="section__box">
-          <div class="section__icon section__icon4"></div>
-          <div class="section__desc">
-            The survey will be kept strictly confidential ( used only for the
-            purposes of research for this project ).
-          </div>
-        </div>
-      </section> -->
       <section class="section privacy">
         <div class="privacy__text">
           填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
@@ -93,6 +42,14 @@ export default class f2eLanding extends Vue {
 
   private privacy: boolean = false
 
+  // private get getInvitationKey(): string {
+  //   // @ts-ignore
+  //   const uri : string = encodeURIComponent(this.$route.query.InvitationKey) || ''
+  //   // @ts-ignore
+  //   return decodeURIComponent(uri)
+  //   // return 'L1aMACAnnWCrNJoDrn53y0pdm6I/DwJOj3gCK6bYRDxaDZDyD8nNmjPFso79srd24g'
+  // }
+
   private handleStart(): void {
     if(this.privacy) {
       this.loading = true
@@ -100,10 +57,11 @@ export default class f2eLanding extends Vue {
       this.timer = setTimeout(() => {
         this.loading = false
         // @ts-ignore
-        this.$router.push(`/f2e?type=enabled&InvitationKey=${decodeURIComponent(encodeURIComponent(this.$route.query.InvitationKey))}`)
+        // this.$router.push(`/f2e?type=enabled&InvitationKey=${this.$route.query.InvitationKey}}`)
+        const key : string = this.$route.query.InvitationKey.toString()
+        this.$router.push({ name: 'f2e', params: { InvitationKey:  key }, query: { type: 'enabled' } })
       }, 800)
     }
-    
   }
 
   private timer: any = null
@@ -114,7 +72,7 @@ export default class f2eLanding extends Vue {
       this.$route.query.type.toString() !== 'enabled'
     ) {
       // @ts-ignore
-      this.$router.push(`/f2e/landing?type=enabled&InvitationKey=${decodeURIComponent(encodeURIComponent(this.$route.query.InvitationKey))}`)
+      this.$router.push(`/f2e/landing?type=enabled&InvitationKey=${this.$route.query.InvitationKey}`)
     }
   }
 
