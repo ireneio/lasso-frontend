@@ -21,7 +21,7 @@
         </div>
       </section>
       <div class="line line3">
-        <v-btn color="#E2A638" rounded x-large @click="handleStart" :disabled="!privacy">
+        <v-btn color="#E2A638" rounded x-large @click="handleStart" :disabled="!privacy || clicked === 'invalid'">
           <span style="color:#fff;">START</span>
         </v-btn>
       </div>
@@ -42,27 +42,43 @@ export default class f2eLanding extends Vue {
 
   private privacy: boolean = false
 
+  private clicked: boolean | string = false
+
   private handleStart(): void {
-    if(this.privacy) {
-      this.loading = true
-      this.timer = null
-      this.timer = setTimeout(() => {
-        this.loading = false
-        const key : string = this.$route.query.InvitationKey.toString()
-        this.$router.push({ name: 'f2e', params: { InvitationKey:  key }, query: { type: 'enabled' } })
-      }, 800)
+    if (this.clicked === 'invalid') {
+      return
+    }
+    if (this.privacy) {
+      if (!this.clicked) {
+        this.clicked = true
+        this.loading = true
+        this.timer = null
+        this.timer = setTimeout(() => {
+          this.loading = false
+          try {
+            const key : string = this.$route.query.InvitationKey.toString()
+            if (key === 'undefined' || key === '') {
+              throw new Error('Err')
+            }
+            this.$router.push({ name: 'f2e', params: { InvitationKey: key }, query: { type: 'enabled' } })
+          } catch (e) {
+            this.clicked = 'invalid'
+            this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
+          }
+        }, 800)
+      } else {
+        setTimeout(() => {
+          this.clicked = false
+        }, 1200)
+      }
     }
   }
 
   private timer: any = null
 
   private created() {
-    if (
-      !this.$route.query.type ||
-      this.$route.query.type.toString() !== 'enabled'
-    ) {
-      // @ts-ignore
-      this.$router.push(`/f2e/landing?type=enabled&InvitationKey=${this.$route.query.InvitationKey}`)
+    if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
+      this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
     }
   }
 

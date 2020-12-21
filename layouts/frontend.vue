@@ -1,8 +1,8 @@
 <template>
-  <v-app id="inspire" v-show="$route.query.type === 'enabled'">
+  <v-app id="inspire" v-show="$route.query.type === 'enabled' || ($route.query.type === 'success' && $route.name === 'f2e-error')">
     <header class="header">
       <div class="header__logo"></div>
-      <div class="header__timer">
+      <div class="header__timer" v-if="$route.query.type === 'enabled'">
         Time<span class="header__time">{{ displayTime }}</span>
       </div>
     </header>
@@ -40,13 +40,14 @@ export default class FrontendLayout extends Vue {
   }
 
   private mounted() {
-
     setInterval(() => {
       this.timer === null ? (this.timer = 1000) : (this.timer += 1000)
     }, 1000)
 
     const timeout = setTimeout(() => {
-      window.scrollTo({ top: 100, behavior: 'smooth'})
+      window.scrollTo(
+        { top: 100, behavior: 'smooth' }
+      )
       clearTimeout(timeout)
     }, 2000)
   }
@@ -59,6 +60,8 @@ export default class FrontendLayout extends Vue {
 <style lang="scss" scoped>
 @import '../assets/scss/utils/_variables.scss';
 .header {
+  position: relative;
+  z-index: 2;
   display: flex;
   height: 55px;
   width: 100%;

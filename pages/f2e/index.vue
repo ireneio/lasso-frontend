@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="show">
     <div class="dialog" v-if="currentQuestion < questions.length - 1">
       <div class="dialog__triangle dialog__triangleL"></div>
       <div class="dialog__pfp"></div>
@@ -114,6 +114,8 @@ interface Questionnaire {
   layout: 'frontend'
 })
 export default class f2eIndex extends Vue {
+  private show: boolean = false
+
   private get browserLanguage(): string {
     return navigator.language
   }
@@ -166,7 +168,6 @@ export default class f2eIndex extends Vue {
         }
       } catch (e) {
         // error dialog
-        console.log(e)
       } finally {
         setTimeout(() => {
           this.$router.push('/f2e/success?type=success')
@@ -243,10 +244,9 @@ export default class f2eIndex extends Vue {
           return result.data.Results[0].Items
         case 99203:
         case 99003:
-          this.$router.push('/f2e/landing')
-          return
+          throw new Error(result.data.StatusCode.toString())
         default:
-          throw new Error(result.status.toString())
+          throw new Error(result.data.StatusCode.toString())
       }
     }
   }
@@ -285,13 +285,13 @@ export default class f2eIndex extends Vue {
   }
 
   private async created() {
-    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled') {
-      // @ts-ignore
-      this.$router.push(`/f2e/landing?type=enabled&InvitationKey=${this.$route.query.InvitationKey}`)
+    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey) {
+      this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
+      return
     }
     try {
       const result = await this.sendGetAssessmentRequest()
-
+      this.show = true
       this.startTime = new Date()
 
       setInterval(() => {
@@ -308,7 +308,7 @@ export default class f2eIndex extends Vue {
       }))
     } catch (e) {
       // error
-      console.log(e)
+      this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
     }
   }
 }
