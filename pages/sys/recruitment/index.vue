@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @click="handleOpenReport" class="btn btn--lasso" style="display:inline-block; margin-bottom: 15px; outline: 3px solid teal;">暫時報告另開分頁按鈕</div>
+    <!-- <div @click="handleOpenReport" class="btn btn--lasso" style="display:inline-block; margin-bottom: 15px; outline: 3px solid teal;">暫時報告另開分頁按鈕</div> -->
     <div class="toolbar">
       <div class="btn toolbar__btn" 
         @click="handleSendInvitationMultiple"
