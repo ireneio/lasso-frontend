@@ -15,11 +15,6 @@
   "lint-staged": {
     "*.{js,vue}": "eslint"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "dependencies": {
     "@baoshishu/vue-editor": "^0.3.0",
     "@nuxt/types": "^2.14.5",

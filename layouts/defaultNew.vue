@@ -19,7 +19,7 @@
       </aside>
       <div class="main">
         <header class="header">
-          <h1 class="header__title">{{ menuData.find(item => item.id === Number(currentTab)).label }}</h1>
+          <h1 class="header__title">{{ currentTabLabel }}</h1>
           <div class="status">
             <div class="status__dp"></div>
             <div class="status__email">Kinlau2000@gmail.com</div>
@@ -71,6 +71,15 @@ export default class DefaultLayout extends Vue {
     }
   }
 
+  private get currentTabLabel() : string {
+    const item = this.menuData.find(item => item.id === Number(this.currentTab))
+    if(item) {
+      return item.label
+    } else {
+      return ''
+    }
+  }
+
   private get username() {
     return 'User'
   }
@@ -87,8 +96,10 @@ export default class DefaultLayout extends Vue {
 
   private created() {
     const tab = localStorage.getItem('tab')
-    if(tab !== undefined) {
+    if(tab) {
       this.currentTab = tab
+    } else {
+      this.currentTab = '1'
     }
   }
 }
@@ -99,7 +110,7 @@ export default class DefaultLayout extends Vue {
   display: flex;
 }
 .aside {
-  width: 250px;
+  min-width: 250px;
   background-color: #282828;
   min-height: 100vh;
 }

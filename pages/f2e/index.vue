@@ -152,7 +152,7 @@ export default class f2eIndex extends Vue {
   private async selectOptionHelper(option: number): Promise<any> {
     this.currentAnswer = option
     this.answers[this.currentQuestion].scale = option
-    if (this.questions.length - 1 === this.currentQuestion) {
+    if (this.questions.length - 2 === this.currentQuestion) {
       // done with the survey, initiate submission
       try {
         const result = await this.sendSubmitAssessmentRequest()

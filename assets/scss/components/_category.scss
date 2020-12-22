@@ -18,8 +18,13 @@
     padding: 10px 12px;
     font-size: 12px;
   }
+  .catrgoryTitleText {
+    flex: 0 0 17%;
+  }
   .categoryProgBar {
+    flex: 0 0 64%;
     position: relative;
+    z-index: 1;
     width: 217px;
     height: 8px;
     margin-left: 12px;
@@ -28,11 +33,13 @@
       position: absolute;
       right: 0;
       bottom: 0;
+      z-index: 3;
       width: 30px;
       height: 8px;
       background-color: #eaeaea;
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
+      border: none;
     }
     
     &__report {
