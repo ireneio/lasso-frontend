@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <div @click="handleOpenReport" class="btn btn--lasso" style="display:inline-block; margin-bottom: 15px; outline: 3px solid teal;">暫時報告另開分頁按鈕</div> -->
     <div class="toolbar">
       <div class="btn toolbar__btn" 
         @click="handleSendInvitationMultiple"
@@ -98,7 +97,7 @@
                 <div class="tableBtn__icon tableBtn--iconInvite"></div>
                 <div class="tableBtn__text">測評邀請</div>
               </div>
-              <div class="tableBtn" @click.stop="toggleSendReportModal = true">
+              <div class="tableBtn" @click.stop="handleToggleSendReportModal(row)">
                 <div class="tableBtn__icon tableBtn--iconSent"></div>
                 <div class="tableBtn__text">寄送報告</div>
               </div>
@@ -316,24 +315,14 @@
         <div class="modal__section">
           <div class="modal__sectionTitle">
             <div class="modal__sectionTitleMainText">發送人選</div>
-            <div class="modal__sectionTitleSubText">選取人選：5人</div>
+            <div class="modal__sectionTitleSubText">選取人選：{{ this.selectMode === 0 ? '1' : this.checked.length }} 人</div>
           </div>
           <div class="inputWrapper">
             <div class="inputWrapper__row">
-              <div class="list">
-                <div class="list__listitem">
-                  <div>職位：產品經理</div>
-                  <div>受測者：王昭棟</div>
-                  <div class="list__icon"></div>
-                </div>
-                <div class="list__listitem">
-                  <div>職位：產品經理</div>
-                  <div>受測者：王昭棟</div>
-                  <div class="list__icon"></div>
-                </div>
-                <div class="list__listitem list__listitem--last">
-                  <div>職位：產品經理</div>
-                  <div>受測者：王昭棟</div>
+              <div class="list" v-if="selectedPersonnel.length">
+                <div class="list__listitem" v-for="item in selectedPersonnel" :key="item.SubjectId">
+                  <div>職位：{{ item.Position }}</div>
+                  <div>受測者：{{ item.Name }}</div>
                   <div class="list__icon"></div>
                 </div>
               </div>
@@ -344,7 +333,7 @@
       <div class="modal__footer">
         <div class="modal__footerToolbar">
           <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="toggleSendReportModal = false">取消</div>
-          <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive">確定</div>
+          <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive" @click="handleSendReport">確定</div>
         </div>
       </div>
     </div>
@@ -512,7 +501,9 @@ export default {
     handleOpenReport(row) {
       window.open(`/sys/recruitment/report?SubjectId=${row.SubjectId}&AssessmentId=${row.CATId}`, '_blank')
     },
-    async handleSendReport() {},
+    async handleSendReport() {
+      // TODO
+    },
     handleSendInvitationMultiple() {
       if(this.checked.length > 0) {
         this.toggleSendInviteModal = true
@@ -521,6 +512,11 @@ export default {
     },
     handleToggleSendInviteModal(row) {
       this.toggleSendInviteModal = true
+      this.selectMode = 0
+      this.subjectId = row.SubjectId
+    },
+    handleToggleSendReportModal(row) {
+      this.toggleSendReportModal = true
       this.selectMode = 0
       this.subjectId = row.SubjectId
     },

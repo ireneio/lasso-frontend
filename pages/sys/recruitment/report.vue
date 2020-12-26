@@ -503,7 +503,7 @@ export default {
   computed: {
     nineBoxItem(index) {
       return (index) => {
-        if(Object.keys(this.pageData.CurrentProfessionCompetency).length > 0 && index < Object.keys(this.pageData.CurrentProfessionCompetency).length) {
+        if(Object.keys(this.pageData.CurrentProfessionCompetency).length > 0 && index < Object.keys(this.pageData.CurrentProfessionCompetency.NineBox).length) {
           let str = ''
           this.pageData.CurrentProfessionCompetency.NineBox[index].Dimensions.forEach(item => {
             str += item + '<br />' 
