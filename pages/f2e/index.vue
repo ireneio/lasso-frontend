@@ -198,11 +198,12 @@ export default class f2eIndex extends Vue {
   }
 
   private async handleSelectOption(option: number): Promise<any> {
-    if (this.answers[this.answers.length - 1].scale !== null) {
-      return setTimeout(() => {})
-    } else {
-      await this.throttleHelper(this.selectOptionHelper, [option], 1200)
-    }
+    // if (this.answers[this.answers.length - 1].scale !== null) {
+    //   return setTimeout(() => {})
+    // } else {
+    //   await this.throttleHelper(this.selectOptionHelper, [option], 1200)
+    // }
+    await this.throttleHelper(this.selectOptionHelper, [option], 1200)
   }
 
   private dateFormatHelper(
