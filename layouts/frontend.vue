@@ -63,10 +63,12 @@ export default class FrontendLayout extends Vue {
   position: relative;
   z-index: 2;
   display: flex;
-  height: 55px;
+  align-items: center;
+  // height: 55px;
   width: 100%;
   background-color: #fff;
-  padding: 18px 16px;
+  padding: 0 16px;
+  padding-top: 18px;
   &__timer {
     margin-left: auto;
     color: $gray;
@@ -85,9 +87,9 @@ export default class FrontendLayout extends Vue {
   }
 }
 .main {
-  min-height: calc(100vh - 55px);
-  max-height: calc(100vh - 55px);
-  height: calc(100vh - 55px);
+  min-height: calc(100vh - 42px);
+  max-height: calc(100vh - 42px);
+  height: calc(100vh - 42px);
   overflow: hidden;
 }
 </style>

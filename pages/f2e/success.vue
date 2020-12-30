@@ -2,6 +2,8 @@
   <div class="loading">
     <div class="loading__warpUp"></div>
     <div class="loading__center"></div>
+    <div class="loading__logo"></div>
+    <div class="loading__words">by MAYO Human Capital Inc.</div>
     <div class="loading__warpDown"></div>
   </div>
 </template>
@@ -16,9 +18,9 @@ export default class f2eSuccess extends Vue {
   private timer: any = null
 
   private created() {
-    if (!this.$route.query.type || this.$route.query.type.toString() !== 'success') {
-      this.$router.push('/f2e?type=enabled')
-    }
+    // if (!this.$route.query.type || this.$route.query.type.toString() !== 'success') {
+    //   this.$router.push('/f2e?type=enabled')
+    // }
   }
 
   private beforeDestroy() {
@@ -44,20 +46,39 @@ export default class f2eSuccess extends Vue {
   &__warpDown {
     background-image: url(/line_e@3x.png);
     width: 100vw;
-    height: 20vh;
+    height: calc(100vh - 20vh - 40vh - 5vh - 17px - 10vh);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
   }
   &__center {
     background-image: url(/people@3x.png);
-    width: 80vw;
-    margin-left: 10vw;
-    margin-right: 10vw;
-    height: 60vh;
+    width: 60vw;
+    margin-left: 20vw;
+    margin-right: 20vw;
+    height: 40vh;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
+  }
+  &__logo {
+    background-image: url(/lassowordlogo@3x.png);
+    width: 25vw;
+    margin-left: 37.5vw;
+    margin-right: 37.5vw;
+    height: 5vh;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  &__words {
+    color: #e2a638;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 10vh;
+    letter-spacing: 0.24px;
+    font-weight: 100;
   }
 }
 </style>

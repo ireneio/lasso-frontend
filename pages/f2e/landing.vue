@@ -16,17 +16,17 @@
           如果您已經準備就緒，請點選確認按鈕開始作答。
         </div>
         <div class="privacy__checkbox">
-          <input type="checkbox" v-model="privacy" id="privacy">
+          <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
+            <input type="checkbox" v-model="privacy" id="privacy">
+          </label>
           <label class="privacy__checkboxText" for="privacy">I agree to the <span class="privacy__highlight">privacy policy</span> </label>
         </div>
       </section>
       <div class="line line3">
-        <v-btn color="#E2A638" rounded x-large @click="handleStart" :disabled="!privacy || clicked === 'invalid'">
-          <span style="color:#fff;">START</span>
-        </v-btn>
+        <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">START</button>
       </div>
     </div>
-    <div class="loading" v-show="loading"></div>
+    <!-- <div class="loading" v-show="loading"></div> -->
   </div>
 </template>
 
@@ -83,14 +83,14 @@ export default class f2eLanding extends Vue {
   }
 
   private mounted() {
-    this.loading = true
-    this.timer = setTimeout(() => {
-      this.loading = false
-    }, 5000)
+    // this.loading = true
+    // this.timer = setTimeout(() => {
+    //   this.loading = false
+    // }, 5000)
   }
 
   private beforeDestroy() {
-    this.timer = null
+    // this.timer = null
   }
 }
 </script>
@@ -101,7 +101,8 @@ export default class f2eLanding extends Vue {
 .wrapper {
   min-height: 100vh;
   min-width: 100vw;
-  padding-top: 348px;
+  // padding-top: 348px;
+  padding-top: 121px;
   background-image: url(/bg@3xlanding.png);
   background-size: cover;
   background-repeat: no-repeat;
@@ -153,9 +154,11 @@ export default class f2eLanding extends Vue {
   height: 38px;
 }
 .line3 {
+  position: relative;
+  z-index: 2;
   margin-top: 44px;
   margin-bottom: 69px;
-  background-image: url(/line_c.svg);
+  background-image: url(/line_c@3x.png);
   height: 39px;
   text-align: center;
 }
@@ -232,4 +235,51 @@ export default class f2eLanding extends Vue {
     color: #e2a638;
   }
 }
+.button {
+  background-color: #e2a638;
+  opacity: 1 !important;
+  width: 150px;
+  font-size: 21px;
+  color: #fff;
+  padding: 12px 43px;
+  border-radius: 31px;
+  letter-spacing: 0.42px;
+  &--disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+  }
+}
+.checkbox {
+  cursor: pointer;
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border-radius: 3px;
+  border: 1px solid #e2a638;
+  > input {
+    display: none;
+  }
+  &--checked {
+    background-color: #e2a638;
+    &:before {
+      display: block;
+      content: '';
+      width: 2px;
+      height: 6px;
+      background-color: #fff;
+      transform: rotate(-40deg) translateX(0px) translateY(6px);
+    }
+    &:after {
+      display: block;
+      content: '';
+      width: 2px;
+      height: 9px;
+      background-color: #fff;
+      transform: rotate(40deg) translateX(3px) translateY(-9px);
+    }
+  }
+  
+}
+
 </style>

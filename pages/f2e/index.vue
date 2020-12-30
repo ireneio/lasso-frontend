@@ -2,9 +2,20 @@
   <div class="wrapper" v-if="show">
     <div class="dialog" v-if="currentQuestion < questions.length - 1">
       <div class="dialog__triangle dialog__triangleL"></div>
-      <div class="dialog__pfp"></div>
+      <div class="dialog__pfp">
+        <div></div>
+      </div>
       <div class="dialog__dialogBox">
         {{ questions.length ? questions[currentQuestion].title : '' }}
+      </div>
+    </div>
+    <div class="dialog" v-else>
+      <div class="dialog__triangle dialog__triangleL"></div>
+      <div class="dialog__pfp">
+        <div></div>
+      </div>
+      <div class="dialog__dialogBox">
+        Placeholder
       </div>
     </div>
     <div class="dialog" v-show="currentAnswer !== null">
@@ -81,6 +92,7 @@
         <div class="progBar">
           <div class="progBar__bar">
             <v-progress-linear
+              style="border-radius: 15px;"
               color="#e2a638"
               height="13"
               :value="progress"
@@ -198,11 +210,6 @@ export default class f2eIndex extends Vue {
   }
 
   private async handleSelectOption(option: number): Promise<any> {
-    // if (this.answers[this.answers.length - 1].scale !== null) {
-    //   return setTimeout(() => {})
-    // } else {
-    //   await this.throttleHelper(this.selectOptionHelper, [option], 1200)
-    // }
     await this.throttleHelper(this.selectOptionHelper, [option], 1200)
   }
 
@@ -308,8 +315,8 @@ export default class f2eIndex extends Vue {
         scale: null
       }))
     } catch (e) {
-      // error
-      this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
+      // this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
+      this.show = true
     }
   }
 }
@@ -365,7 +372,7 @@ export default class f2eIndex extends Vue {
 }
 .uxWrapper {
   position: absolute;
-  bottom: 26px;
+  bottom: 14px;
   left: 16px;
   right: 16px;
 }
@@ -400,15 +407,25 @@ export default class f2eIndex extends Vue {
     background-image: url(/talkbox_corner_r.svg);
   }
   &__pfp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     height: 50px;
     width: 50px;
     margin-right: 20px;
+    padding: 7px;
     background-color: $white;
-    background-image: url(/people_b.svg);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
+    > div {
+      height: 42px;
+      width: 42px;
+      border-radius: 50%;
+      background-color: $white;
+      background-image: url(/people_b.svg);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
   }
   &__dialogBox {
     flex: 0 0 calc(100% - 15% - 20px - 15%);
@@ -428,16 +445,18 @@ export default class f2eIndex extends Vue {
   font-size: 17px;
 }
 .progBar {
+  padding-top: 4px;
   display: flex;
   align-items: center;
   &__number {
-    flex: 0 0 15%;
+    flex: 0 0 10%;
     position: absolute;
     right: 0;
     color: $primary;
   }
   &__bar {
-    flex: 0 0 80%;
+    flex: 0 0 88%;
+    margin-top: 2px;
   }
 }
 </style>
