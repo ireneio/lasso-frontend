@@ -114,7 +114,7 @@ interface Questionnaire {
 }
 
 @Component({
-  layout: 'frontend'
+  layout: 'frontend',
 })
 export default class f2eIndex extends Vue {
   private show: boolean = false
@@ -141,7 +141,7 @@ export default class f2eIndex extends Vue {
 
   private get getInvitationKey(): string {
     // @ts-ignore
-    const uri : string = encodeURIComponent(this.$route.params.InvitationKey) || ''
+    const uri: string = encodeURIComponent(this.$route.params.InvitationKey) || ''
     // @ts-ignore
     return decodeURIComponent(uri)
   }

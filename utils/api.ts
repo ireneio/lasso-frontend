@@ -1,5 +1,4 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
-// import { NuxtCookies } from 'cookie-universal-nuxt'
 import { AxiosInstance } from 'axios'
 
 let $nuxtAxiosInstance: NuxtAxiosInstance
@@ -17,11 +16,5 @@ export function initializeAxios(axiosInstance: NuxtAxiosInstance) {
     timeout: Number(process.env.TIMEOUT_LIMIT) || 20000
   })
 }
-
-// let $cookies: NuxtCookies
-
-// export function initializeCookies(cookiesInstance: NuxtCookies) {
-//   $cookies = cookiesInstance
-// }
 
 export { $axios }

@@ -33,9 +33,10 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { $axios } from '~/utils/api'
+import { i18nStore } from '~/store'
 
 @Component({
-  layout: 'landing'
+  layout: 'landing',
 })
 export default class f2eLanding extends Vue {
   private loading: boolean = false
@@ -51,7 +52,7 @@ export default class f2eLanding extends Vue {
     if (this.privacy) {
       if (!this.clicked) {
         this.clicked = true
-        this.loading = true
+        // this.loading = true
         this.timer = null
         this.timer = setTimeout(() => {
           this.loading = false
@@ -76,10 +77,12 @@ export default class f2eLanding extends Vue {
 
   private timer: any = null
 
-  private created() {
+  private async created() {
     if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
       this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
     }
+    // await i18nStore.sendGetI18nRequest()
+    console.log(i18nStore.i18nData)
   }
 
   private mounted() {

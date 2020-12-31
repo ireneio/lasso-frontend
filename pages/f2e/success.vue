@@ -12,7 +12,7 @@
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 
 @Component({
-  layout: 'landing'
+  layout: 'landing',
 })
 export default class f2eSuccess extends Vue {
   private timer: any = null
