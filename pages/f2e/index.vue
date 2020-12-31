@@ -9,15 +9,6 @@
         {{ questions.length ? questions[currentQuestion].title : '' }}
       </div>
     </div>
-    <div class="dialog" v-else>
-      <div class="dialog__triangle dialog__triangleL"></div>
-      <div class="dialog__pfp">
-        <div></div>
-      </div>
-      <div class="dialog__dialogBox">
-        Placeholder
-      </div>
-    </div>
     <div class="dialog" v-show="currentAnswer !== null">
       <div class="dialog__triangle dialog__triangleR"></div>
       <div class="dialog__dialogBox response">{{ currentAnswer }}</div>
@@ -164,26 +155,14 @@ export default class f2eIndex extends Vue {
   private async selectOptionHelper(option: number): Promise<any> {
     this.currentAnswer = option
     this.answers[this.currentQuestion].scale = option
-    if (this.questions.length - 2 === this.currentQuestion) {
+    if (this.currentQuestion >=  this.questions.length - 1) {
       // done with the survey, initiate submission
       try {
-        const result = await this.sendSubmitAssessmentRequest()
-        switch (result.status) {
-          case 200:
-            // submission success, go to next page
-            setTimeout(() => {
-              this.$router.push('/f2e/success?type=success')
-            }, 800)
-            break
-          default:
-            throw new Error(result.status.toString())
-        }
+        await this.sendSubmitAssessmentRequest()
+        this.$router.push('/f2e/success?type=success')
       } catch (e) {
         // error dialog
-      } finally {
-        setTimeout(() => {
-          this.$router.push('/f2e/success?type=success')
-        }, 800)
+        this.$router.push({ name: 'f2e-error', params: { statusCode: e.message }, query: { type: 'success' } })
       }
     } else {
       setTimeout(() => {
@@ -282,7 +261,7 @@ export default class f2eIndex extends Vue {
     )
     if (result) {
       switch (result.data.StatusCode) {
-        case 200:
+        case 0:
           return result.data
         case 99003:
           throw new Error('資料格式錯誤')
@@ -315,8 +294,7 @@ export default class f2eIndex extends Vue {
         scale: null
       }))
     } catch (e) {
-      // this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
-      this.show = true
+      this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
     }
   }
 }

@@ -18,9 +18,9 @@ export default class f2eSuccess extends Vue {
   private timer: any = null
 
   private created() {
-    // if (!this.$route.query.type || this.$route.query.type.toString() !== 'success') {
-    //   this.$router.push('/f2e?type=enabled')
-    // }
+    if (!this.$route.query.type || this.$route.query.type.toString() !== 'success') {
+      this.$router.push('/f2e?type=enabled')
+    }
   }
 
   private beforeDestroy() {
