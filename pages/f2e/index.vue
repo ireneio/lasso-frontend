@@ -15,7 +15,7 @@
     </div>
     <div class="uxWrapper">
       <div class="options__wrapper topWrapper">
-        <div class="options__title">Select the appropriate option below :</div>
+        <div class="options__title">{{ i18nTarget(4) || 'Select the appropriate option below :' }}</div>
         <div class="options__box">
           <div class="options">
             <div
@@ -25,7 +25,7 @@
             >
               <div class="options__number">1</div>
             </div>
-            <div class="options__caption">{{ browserLanguage === 'zh-TW' ? '從未如此': 'never' }}</div>
+            <div class="options__caption">{{ i18nTarget(5) || 'never' }}</div>
           </div>
           <div class="options">
             <div
@@ -35,7 +35,7 @@
             >
               <div class="options__number">2</div>
             </div>
-            <div class="options__caption">{{ browserLanguage === 'zh-TW' ? '偶爾如此': 'rarely' }}</div>
+            <div class="options__caption">{{ i18nTarget(6) || 'rarely' }}</div>
           </div>
           <div class="options">
             <div
@@ -45,7 +45,7 @@
             >
               <div class="options__number">3</div>
             </div>
-            <div class="options__caption">{{ browserLanguage === 'zh-TW' ? '較少如此': 'seldom' }}</div>
+            <div class="options__caption">{{ i18nTarget(7) || 'seldom' }}</div>
           </div>
           <div class="options">
             <div
@@ -55,7 +55,7 @@
             >
               <div class="options__number">4</div>
             </div>
-            <div class="options__caption">{{ browserLanguage === 'zh-TW' ? '有時如此': 'sometimes' }}</div>
+            <div class="options__caption">{{ i18nTarget(8) || 'sometimes' }}</div>
           </div>
           <div class="options">
             <div
@@ -65,7 +65,7 @@
             >
               <div class="options__number">5</div>
             </div>
-            <div class="options__caption">{{ browserLanguage === 'zh-TW' ? '經常如此': 'often' }}</div>
+            <div class="options__caption">{{ i18nTarget(9) || 'often' }}</div>
           </div>
           <div class="options">
             <div
@@ -75,7 +75,7 @@
             >
               <div class="options__number">6</div>
             </div>
-            <div class="options__caption">{{ browserLanguage === 'zh-TW' ? '總是如此': 'always' }}</div>
+            <div class="options__caption">{{ i18nTarget(10) || 'always' }}</div>
           </div>
         </div>
       </div>
@@ -102,16 +102,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { $axios } from '~/utils/api'
-
-interface Answer {
-  id: string
-  scale: number | null
-}
-
-interface Questionnaire {
-  id: string
-  title: string
-}
+import { Answer, Questionnaire } from '~/types/index'
+import { I18nFactory } from '~/utils/i18n'
 
 @Component({
   layout: 'frontend',
@@ -271,8 +263,15 @@ export default class f2eIndex extends Vue {
     }
   }
 
+  private i18nTarget(index: number): string {
+    if(index >= I18nFactory.getI18nData.length) {
+      return ''
+    }
+    return I18nFactory.i18nTarget(index)
+  }
+
   private async created() {
-    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey) {
+    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey || !this.$route.params.i18nData) {
       this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
       return
     }

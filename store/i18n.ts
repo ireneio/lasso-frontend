@@ -7,11 +7,11 @@ interface i18nData {
 }
 
 @Module({
-  name: 'modules/I18n',
-  namespaced: true,
-  stateFactory: true,
+  name: 'modules/i18n',
+  // namespaced: true,
+  stateFactory: true
 })
-export default class I18n extends VuexModule {
+export default class i18n extends VuexModule {
   public i18nData: Array<i18nData> | null = []
 
   @Mutation

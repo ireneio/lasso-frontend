@@ -3,7 +3,7 @@
     <header class="header">
       <div class="header__logo"></div>
       <div class="header__timer" v-if="$route.query.type === 'enabled'">
-        Time<span class="header__time">{{ displayTime }}</span>
+        {{ i18nTarget(3) || 'Time' }}<span class="header__time">{{ displayTime }}</span>
       </div>
     </header>
     <main class="main">
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
-// import { authStore } from '~/store'
+import { I18nFactory } from '~/utils/i18n'
 
 @Component
 export default class FrontendLayout extends Vue {
@@ -37,6 +37,13 @@ export default class FrontendLayout extends Vue {
     seconds = seconds < 10 ? '0' + seconds : seconds
 
     return minutes + ':' + seconds
+  }
+
+  private i18nTarget(index: number): string {
+    if(index >= I18nFactory.getI18nData.length) {
+      return ''
+    }
+    return I18nFactory.i18nTarget(index)
   }
 
   private mounted() {

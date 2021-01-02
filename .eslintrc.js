@@ -1,8 +1,8 @@
 module.exports = {
   root: true,
   env: {
-    browser: true,
-    node: true
+    browser: false,
+    node: false
   },
   extends: [
     '@nuxtjs/eslint-config-typescript',

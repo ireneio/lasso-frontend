@@ -1,7 +1,7 @@
 <template>
   <div class="loading">
     <div class="loading__warpUp"></div>
-    <div class="loading__center"></div>
+    <div class="loading__center" :style="{ 'background-image': `url(${i18nTarget(11) || '/people@3x.png'})` }"></div>
     <div class="loading__logo"></div>
     <div class="loading__words">by MAYO Human Capital Inc.</div>
     <div class="loading__warpDown"></div>
@@ -10,12 +10,20 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import { I18nFactory } from '~/utils/i18n'
 
 @Component({
   layout: 'landing',
 })
 export default class f2eSuccess extends Vue {
   private timer: any = null
+
+  private i18nTarget(index: number): string {
+    if(index >= I18nFactory.getI18nData.length) {
+      return ''
+    }
+    return I18nFactory.i18nTarget(index)
+  }
 
   private created() {
     if (!this.$route.query.type || this.$route.query.type.toString() !== 'success') {
@@ -35,7 +43,6 @@ export default class f2eSuccess extends Vue {
   width: 100vw;
   overflow: hidden;
   &__warpUp {
-    // background-color: #000;
     background-image: url(/line_d@3x.png);
     width: 100vw;
     height: 20vh;

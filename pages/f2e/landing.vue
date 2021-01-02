@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div class="wrapper" v-show="!loading">
+    <div class="wrapper" v-if="allowRender" v-show="!loading">
       <div class="logo"></div>
       <section class="section privacy">
-        <div class="privacy__text">
+        <div class="privacy__text" v-html="i18nTarget(0)" v-if="i18nTarget(0) !== ''"></div>
+        <div class="privacy__text" v-else>
           填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
           <br />
           <br />
@@ -19,7 +20,7 @@
           <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
             <input type="checkbox" v-model="privacy" id="privacy">
           </label>
-          <label class="privacy__checkboxText" for="privacy">I agree to the <span class="privacy__highlight">privacy policy</span> </label>
+          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget(1) || 'I agree to the' }} <span class="privacy__highlight">{{ i18nTarget(2) || 'privacy policy' }}</span> </label>
         </div>
       </section>
       <div class="line line3">
@@ -33,10 +34,10 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { $axios } from '~/utils/api'
-import { i18nStore } from '~/store'
+import { I18nFactory } from '~/utils/i18n'
 
 @Component({
-  layout: 'landing',
+  layout: 'landing'
 })
 export default class f2eLanding extends Vue {
   private loading: boolean = false
@@ -55,13 +56,13 @@ export default class f2eLanding extends Vue {
         // this.loading = true
         this.timer = null
         this.timer = setTimeout(() => {
-          this.loading = false
+        // this.loading = false
           try {
             const key : string = this.$route.query.InvitationKey.toString()
             if (key === 'undefined' || key === '') {
               throw new Error('Err')
             }
-            this.$router.push({ name: 'f2e', params: { InvitationKey: key }, query: { type: 'enabled' } })
+            this.$router.push({ name: 'f2e', params: { InvitationKey: key, i18nData: JSON.stringify([ ...I18nFactory.getI18nData ]) }, query: { type: 'enabled' } })
           } catch (e) {
             this.clicked = 'invalid'
             this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
@@ -77,12 +78,21 @@ export default class f2eLanding extends Vue {
 
   private timer: any = null
 
+  private i18nTarget(index: number): string {
+    if(index >= I18nFactory.getI18nData.length) {
+      return ''
+    }
+    return I18nFactory.i18nTarget(index)
+  }
+
+  private allowRender: boolean = false
+
   private async created() {
     if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
       this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
     }
-    // await i18nStore.sendGetI18nRequest()
-    console.log(i18nStore.i18nData)
+    await I18nFactory.init()
+    this.allowRender = true
   }
 
   private mounted() {
@@ -282,7 +292,6 @@ export default class f2eLanding extends Vue {
       transform: rotate(40deg) translateX(3px) translateY(-9px);
     }
   }
-  
 }
 
 </style>
