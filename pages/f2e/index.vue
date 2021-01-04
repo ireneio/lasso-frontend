@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="dialog" v-if="currentQuestion < questions.length - 1">
+    <div class="dialog" v-if="(currentQuestion+1) <= questions.length">
       <div class="dialog__triangle dialog__triangleL"></div>
       <div class="dialog__pfp">
         <div></div>
@@ -156,8 +156,7 @@ export default class f2eIndex extends Vue {
   private async selectOptionHelper(option: number): Promise<any> {
     this.currentAnswer = option
     this.answers[this.currentQuestion].scale = option
-    this.currentQuestion += 1
-    if (this.currentQuestion ===  this.questions.length) {
+    if ((this.currentQuestion+1) ===  this.questions.length) {
       // done with the survey, initiate submission
       try {
         await this.sendSubmitAssessmentRequest()
@@ -168,6 +167,7 @@ export default class f2eIndex extends Vue {
       }
     } else {
       setTimeout(() => {
+        this.currentQuestion += 1
         this.currentAnswer = null
       }, 800)
     }
