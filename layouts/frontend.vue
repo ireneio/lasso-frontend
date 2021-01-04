@@ -3,7 +3,7 @@
     <header class="header">
       <div class="header__logo"></div>
       <div class="header__timer" v-if="$route.query.type === 'enabled'">
-        {{ i18nTarget(3) || 'Time' }}<span class="header__time">{{ displayTime }}</span>
+        {{ i18nTarget('C0301') || 'Time' }}<span class="header__time">{{ displayTime }}</span>
       </div>
     </header>
     <main class="main">
@@ -39,11 +39,8 @@ export default class FrontendLayout extends Vue {
     return minutes + ':' + seconds
   }
 
-  private i18nTarget(index: number): string {
-    if(index >= I18nFactory.getI18nData.length) {
-      return ''
-    }
-    return I18nFactory.i18nTarget(index)
+  private i18nTarget(key: string): string {
+    return I18nFactory.i18nTarget(key)
   }
 
   private mounted() {

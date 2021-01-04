@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" v-if="show">
+  <div class="wrapper">
     <div class="dialog" v-if="currentQuestion < questions.length - 1">
       <div class="dialog__triangle dialog__triangleL"></div>
       <div class="dialog__pfp">
@@ -9,23 +9,32 @@
         {{ questions.length ? questions[currentQuestion].title : '' }}
       </div>
     </div>
+    <div class="dialog" v-else>
+      <div class="dialog__triangle dialog__triangleL"></div>
+      <div class="dialog__pfp">
+        <div></div>
+      </div>
+      <div class="dialog__dialogBox">
+        預設問題
+      </div>
+    </div>
     <div class="dialog" v-show="currentAnswer !== null">
       <div class="dialog__triangle dialog__triangleR"></div>
       <div class="dialog__dialogBox response">{{ currentAnswer }}</div>
     </div>
     <div class="uxWrapper">
       <div class="options__wrapper topWrapper">
-        <div class="options__title">{{ i18nTarget(4) || 'Select the appropriate option below :' }}</div>
+        <div class="options__title">{{ i18nTarget('C0302') || 'Select the appropriate option below :' }}</div>
         <div class="options__box">
           <div class="options">
             <div
               class="options__ring"
               :class="{ 'options__ring--selected': currentAnswer === 1 }"
-              @click="handleSelectOption(1)"
+              @click="handleSelectOption('C0303')"
             >
               <div class="options__number">1</div>
             </div>
-            <div class="options__caption">{{ i18nTarget(5) || 'never' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0304') || 'never' }}</div>
           </div>
           <div class="options">
             <div
@@ -35,7 +44,7 @@
             >
               <div class="options__number">2</div>
             </div>
-            <div class="options__caption">{{ i18nTarget(6) || 'rarely' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0305') || 'rarely' }}</div>
           </div>
           <div class="options">
             <div
@@ -45,7 +54,7 @@
             >
               <div class="options__number">3</div>
             </div>
-            <div class="options__caption">{{ i18nTarget(7) || 'seldom' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0306') || 'seldom' }}</div>
           </div>
           <div class="options">
             <div
@@ -55,7 +64,7 @@
             >
               <div class="options__number">4</div>
             </div>
-            <div class="options__caption">{{ i18nTarget(8) || 'sometimes' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0307') || 'sometimes' }}</div>
           </div>
           <div class="options">
             <div
@@ -65,7 +74,7 @@
             >
               <div class="options__number">5</div>
             </div>
-            <div class="options__caption">{{ i18nTarget(9) || 'often' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0308') || 'often' }}</div>
           </div>
           <div class="options">
             <div
@@ -75,7 +84,7 @@
             >
               <div class="options__number">6</div>
             </div>
-            <div class="options__caption">{{ i18nTarget(10) || 'always' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0309') || 'always' }}</div>
           </div>
         </div>
       </div>
@@ -263,15 +272,12 @@ export default class f2eIndex extends Vue {
     }
   }
 
-  private i18nTarget(index: number): string {
-    if(index >= I18nFactory.getI18nData.length) {
-      return ''
-    }
-    return I18nFactory.i18nTarget(index)
+  private i18nTarget(key: string): string {
+    return I18nFactory.i18nTarget(key)
   }
 
   private async created() {
-    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey || !this.$route.params.i18nData) {
+    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey) {
       this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
       return
     }

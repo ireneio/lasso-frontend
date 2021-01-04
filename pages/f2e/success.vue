@@ -1,7 +1,7 @@
 <template>
   <div class="loading">
     <div class="loading__warpUp"></div>
-    <div class="loading__center" :style="{ 'background-image': `url(${i18nTarget(11) || '/people@3x.png'})` }"></div>
+    <div class="loading__center" :style="{ 'background-image': `url(${i18nTarget('C0501') || '/people@3x.png'})` }"></div>
     <div class="loading__logo"></div>
     <div class="loading__words">by MAYO Human Capital Inc.</div>
     <div class="loading__warpDown"></div>
@@ -18,11 +18,8 @@ import { I18nFactory } from '~/utils/i18n'
 export default class f2eSuccess extends Vue {
   private timer: any = null
 
-  private i18nTarget(index: number): string {
-    if(index >= I18nFactory.getI18nData.length) {
-      return ''
-    }
-    return I18nFactory.i18nTarget(index)
+  private i18nTarget(key: string): string {
+    return I18nFactory.i18nTarget(key)
   }
 
   private created() {

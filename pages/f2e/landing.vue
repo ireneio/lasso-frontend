@@ -3,7 +3,7 @@
     <div class="wrapper" v-if="allowRender" v-show="!loading">
       <div class="logo"></div>
       <section class="section privacy">
-        <div class="privacy__text" v-html="i18nTarget(0)" v-if="i18nTarget(0) !== ''"></div>
+        <div class="privacy__text" v-html="i18nTarget('C0101')" v-if="i18nTarget('C0101') !== ''"></div>
         <div class="privacy__text" v-else>
           填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
           <br />
@@ -20,11 +20,11 @@
           <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
             <input type="checkbox" v-model="privacy" id="privacy">
           </label>
-          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget(1) || 'I agree to the' }} <span class="privacy__highlight">{{ i18nTarget(2) || 'privacy policy' }}</span> </label>
+          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget('C0102') || 'I agree to the' }} <span class="privacy__highlight">{{ i18nTarget('C0103') || 'privacy policy' }}</span> </label>
         </div>
       </section>
       <div class="line line3">
-        <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">START</button>
+        <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">{{ i18nTarget('C0104') || 'START' }}</button>
       </div>
     </div>
     <!-- <div class="loading" v-show="loading"></div> -->
@@ -62,8 +62,9 @@ export default class f2eLanding extends Vue {
             if (key === 'undefined' || key === '') {
               throw new Error('Err')
             }
-            this.$router.push({ name: 'f2e', params: { InvitationKey: key, i18nData: JSON.stringify([ ...I18nFactory.getI18nData ]) }, query: { type: 'enabled' } })
+            this.$router.push({ name: 'f2e', params: { InvitationKey: key }, query: { type: 'enabled' } })
           } catch (e) {
+            console.log(e.message)
             this.clicked = 'invalid'
             this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
           }
@@ -78,11 +79,12 @@ export default class f2eLanding extends Vue {
 
   private timer: any = null
 
-  private i18nTarget(index: number): string {
-    if(index >= I18nFactory.getI18nData.length) {
-      return ''
-    }
-    return I18nFactory.i18nTarget(index)
+  private i18nTarget(key: string): string {
+    return I18nFactory.i18nTarget(key)
+  }
+
+  private get i18nData(): any {
+    return I18nFactory.getI18nData
   }
 
   private allowRender: boolean = false

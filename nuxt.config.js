@@ -67,5 +67,9 @@ export default {
   env: {
     API_URL: process.env.NUXT_ENV_API_URL,
     TIMEOUT_LIMIT: process.env.NUXT_ENV_TIMEOUT_LIMIT
+  },
+  server: {
+    port: 3000, // default: 3000
+    host: '0.0.0.0' // default: localhost
   }
 }
