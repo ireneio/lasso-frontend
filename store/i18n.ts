@@ -7,7 +7,7 @@ interface i18nData {
 }
 
 @Module({
-  name: 'modules/i18n',
+  name: 'modules/i18n', 
   // namespaced: true,
   stateFactory: true
 })

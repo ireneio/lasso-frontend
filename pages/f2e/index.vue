@@ -30,7 +30,7 @@
             <div
               class="options__ring"
               :class="{ 'options__ring--selected': currentAnswer === 1 }"
-              @click="handleSelectOption('C0303')"
+              @click="handleSelectOption(1)"
             >
               <div class="options__number">1</div>
             </div>
