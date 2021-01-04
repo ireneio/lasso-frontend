@@ -34,7 +34,7 @@
             >
               <div class="options__number">1</div>
             </div>
-            <div class="options__caption">{{ i18nTarget('C0304') || 'never' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0303') || 'never' }}</div>
           </div>
           <div class="options">
             <div
@@ -44,7 +44,7 @@
             >
               <div class="options__number">2</div>
             </div>
-            <div class="options__caption">{{ i18nTarget('C0305') || 'rarely' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0304') || 'rarely' }}</div>
           </div>
           <div class="options">
             <div
@@ -54,7 +54,7 @@
             >
               <div class="options__number">3</div>
             </div>
-            <div class="options__caption">{{ i18nTarget('C0306') || 'seldom' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0305') || 'seldom' }}</div>
           </div>
           <div class="options">
             <div
@@ -64,7 +64,7 @@
             >
               <div class="options__number">4</div>
             </div>
-            <div class="options__caption">{{ i18nTarget('C0307') || 'sometimes' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0306') || 'sometimes' }}</div>
           </div>
           <div class="options">
             <div
@@ -74,7 +74,7 @@
             >
               <div class="options__number">5</div>
             </div>
-            <div class="options__caption">{{ i18nTarget('C0308') || 'often' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0307') || 'often' }}</div>
           </div>
           <div class="options">
             <div
@@ -84,7 +84,7 @@
             >
               <div class="options__number">6</div>
             </div>
-            <div class="options__caption">{{ i18nTarget('C0309') || 'always' }}</div>
+            <div class="options__caption">{{ i18nTarget('C0308') || 'always' }}</div>
           </div>
         </div>
       </div>
