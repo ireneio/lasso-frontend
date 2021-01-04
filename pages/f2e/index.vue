@@ -276,9 +276,18 @@ export default class f2eIndex extends Vue {
     return I18nFactory.i18nTarget(key)
   }
 
+  private disableselect(e: any): boolean {return false}
+
+  private initDisableSelect(): void {
+    document.onselectstart = function() { return false }
+    document.onmousedown = this.disableselect
+  }
+
+
+
   private async created() {
     if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey) {
-      this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
+      // this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
       return
     }
     try {
@@ -299,8 +308,12 @@ export default class f2eIndex extends Vue {
         scale: null
       }))
     } catch (e) {
-      this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
+      // this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
     }
+  }
+
+  private mounted() {
+    this.initDisableSelect()
   }
 }
 </script>
