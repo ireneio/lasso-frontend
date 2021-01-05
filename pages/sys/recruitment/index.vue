@@ -431,7 +431,7 @@
 import { $axios } from '~/utils/api'
 
 export default {
-  layout: 'defaultNew',
+  layout: 'backend',
   data() {
     return {
       checked: [],
