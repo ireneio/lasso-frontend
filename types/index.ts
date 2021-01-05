@@ -12,3 +12,8 @@ export interface Questionnaire {
   id: string
   title: string
 }
+export interface LoginInfo {
+  Email: string,
+  Password: string,
+  CompanyCode?: string
+}

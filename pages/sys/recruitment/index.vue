@@ -432,6 +432,7 @@ import { $axios } from '~/utils/api'
 
 export default {
   layout: 'backend',
+  middleware: ['auth'],
   data() {
     return {
       checked: [],

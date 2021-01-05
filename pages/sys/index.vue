@@ -4,7 +4,8 @@
 
 <script>
 export default {
-  layout: 'backend'
+  layout: 'backend',
+  middleware: ['auth']
 }
 </script>
 

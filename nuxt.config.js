@@ -66,7 +66,9 @@ export default {
   },
   env: {
     API_URL: process.env.NUXT_ENV_API_URL,
-    TIMEOUT_LIMIT: process.env.NUXT_ENV_TIMEOUT_LIMIT
+    TIMEOUT_LIMIT: process.env.NUXT_ENV_TIMEOUT_LIMIT,
+    AUTH_REFERER_URL: process.env.NUXT_ENV_AUTH_REFERER_URL,
+    AUTH_API_URL: process.env.NUXT_ENV_AUTH_API_URL,
   },
   server: {
     port: 3000, // default: 3000

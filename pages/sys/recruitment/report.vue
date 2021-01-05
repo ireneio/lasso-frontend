@@ -474,6 +474,7 @@
 import { $axios } from '~/utils/api'
 
 export default {
+  middleware: ['auth'],
   data() {
     return {
       modalView: 0,

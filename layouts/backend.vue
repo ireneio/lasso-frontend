@@ -23,7 +23,7 @@
           <div class="status">
             <div class="status__dp"></div>
             <div class="status__email">Kinlau2000@gmail.com</div>
-            <div class="status__cog"></div>
+            <div class="status__cog" @click="handleLogout"></div>
           </div>
         </header>
         <main class="body">
@@ -44,6 +44,8 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import { $authVerify } from '~/utils/api'
+import Token from '~/utils/token'
 
 @Component
 export default class DefaultLayout extends Vue {
@@ -92,7 +94,27 @@ export default class DefaultLayout extends Vue {
     return ''
   }
 
-  private async handleLogout(): Promise<any> {}
+  private async handleLogout(): Promise<any> {
+    try {
+      const token = Token.getToken()
+      if(token) {
+        const config = { 
+          headers: {
+            Authorization: Token.getToken()
+          }
+        }
+        await $authVerify.post('/api/account/Signout', {}, config)
+        Token.deleteToken()
+      } else {
+        throw new Error('ENONE Y')
+      }
+    } catch(e) {
+      // error
+      console.error(e.message)
+    } finally {
+      this.$router.push('/sys/login')
+    }
+  }
 
   private created() {
     const tab = localStorage.getItem('tab')
