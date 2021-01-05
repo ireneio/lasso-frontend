@@ -1,5 +1,5 @@
 <template>
-  <div class="modal--fullScreen">
+  <div class="modal--fullScreen" id="print">
     <div class="modal__title">
       <div class="modal__titleText"> 
         <span @click="modalView = 0" :class="{ 'modal__titleText--focused': modalView === 0, 'modal__titleText--blurred': modalView === 1 }">
@@ -464,6 +464,7 @@
     </div>
     <div class="modal__footer">
       <div class="modal__footerToolbar">
+        <div class="btn btn--wide btn--lasso btn--rounded" style="margin-right:12px;" @click="handlePrint">列印</div>
         <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="handleCloseWindow">確定</div>
       </div>
     </div>
@@ -610,6 +611,16 @@ export default {
     handleCloseWindow() {
       window.close()
     },
+    handlePrint() {
+      this.processPrint()
+    },
+    processPrint() {
+      const ogHtml = document.body.innerHTML
+      document.body.innerHTML = document.querySelector('#print').innerHTML
+      console.log(document.body.innerHTML)
+      window.print()
+      document.body.innerHTML = ogHtml
+    },
     async sendGetAssessmentResultRequest() {
       try {
         const requestBody = {
@@ -652,3 +663,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+::-webkit-scrollbar {
+    display: none;
+}
+</style>
