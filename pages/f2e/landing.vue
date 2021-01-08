@@ -66,6 +66,7 @@ import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { $axios } from '~/utils/api'
 import { I18nFactory } from '~/utils/i18n'
 import { eventStopDefault } from '~/utils/helpers'
+import { Answer, Questionnaire } from '~/types/index'
 
 @Component({
   layout: 'landing'
@@ -93,7 +94,14 @@ export default class f2eLanding extends Vue {
             if (key === 'undefined' || key === '') {
               throw new Error('Err')
             }
-            this.$router.push({ name: 'f2e', params: { InvitationKey: key }, query: { type: 'enabled' } })
+            this.$router.push({
+              name: 'f2e',
+              params: {
+                InvitationKey: key,
+                questions: JSON.stringify(this.questions),
+                answers: JSON.stringify(this.answers) 
+              },
+              query: { type: 'enabled' } })
           } catch (e) {
             console.log(e.message)
             this.clicked = 'invalid'
@@ -132,12 +140,67 @@ export default class f2eLanding extends Vue {
     this.privacyOpened = false
   }
 
-  private async created() {
-    if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
-      this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
+  private expiration: Date | null = null
+
+  private get getInvitationKey(): string {
+    // @ts-ignore
+    const uri: string = encodeURIComponent(this.$route.query.InvitationKey) || ''
+    // @ts-ignore
+    return decodeURIComponent(uri)
+  }
+
+  private async sendGetAssessmentRequest(): Promise<any> {
+    const requestBody = {
+      Conditions: [
+        {
+          InvitationKey: this.getInvitationKey
+        }
+      ]
     }
-    await I18nFactory.init()
-    this.allowRender = true
+    const result = await $axios.post('/Client/GetAssessment', requestBody)
+    if (result) {
+      switch (result.data.StatusCode) {
+        case 0:
+          this.expiration = new Date(result.data.Results[0].ExpirationTime)
+          return result.data.Results[0].Items
+        case 99203:
+        case 99003:
+          throw new Error(result.data.StatusCode.toString())
+        default:
+          throw new Error(result.data.StatusCode.toString())
+      }
+    }
+  }
+
+  private questions: Array<Questionnaire> = []
+
+  private answers: Array<Answer> = []
+
+  private async initAssessment() {
+    try {
+      if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
+        throw new Error('Required Key Missing')
+      }
+      await I18nFactory.init()
+      const result = await this.sendGetAssessmentRequest()
+      console.log(result)
+
+      this.questions = result.map((item: any) => ({
+        id: item.ItemId,
+        title: item.Item
+      }))
+      this.answers = result.map((item: any) => ({
+        id: item.ItemId,
+        scale: null
+      }))
+      this.allowRender = true
+    } catch(e) {
+      this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
+    }
+  }
+
+  private async created() {
+    await this.initAssessment()
   }
 
   private mounted() {
