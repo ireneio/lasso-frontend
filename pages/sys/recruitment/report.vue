@@ -617,11 +617,7 @@ export default {
       this.processPrint()
     },
     processPrint() {
-      const ogHtml = document.body.innerHTML
-      // document.body.innerHTML = document.querySelector('#print').innerHTML
-      console.log(document.body.innerHTML)
       window.print()
-      // document.body.innerHTML = ogHtml
       return true
     },
     async sendGetAssessmentResultRequest() {
