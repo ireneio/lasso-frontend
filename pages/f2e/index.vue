@@ -256,19 +256,30 @@ export default class f2eIndex extends Vue {
     document.onmousedown = this.disableselect
   }
 
-  private interval: any = null
-
-  private async created() {
-    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled') {
+  private initData(): void {
+    try {
+      if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled') {
+        throw new Error('Required Key Missing')
+      }
+      this.questions = JSON.parse(this.$route.params.questions)
+      this.answers = JSON.parse(this.$route.params.answers)
+    } catch(e) {
       this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
-      return
     }
-    this.questions = JSON.parse(this.$route.params.questions)
-    this.answers = JSON.parse(this.$route.params.answers)
+  }
+
+  private initTimer(): void {
     this.startTime = new Date()
     this.interval = setInterval(() => {
       this.timer === null ? (this.timer = 1000) : (this.timer += 1000)
     }, 1000)
+  }
+
+  private interval: any = null
+
+  private async created() {
+    this.initData()
+    this.initTimer()
   }
 
   private mounted() {
