@@ -1,6 +1,6 @@
 <template>
   <div class="modal--fullScreen" id="print">
-    <div class="modal__title">
+    <div class="modal__title noPrint">
       <div class="modal__titleText"> 
         <span @click="modalView = 0" :class="{ 'modal__titleText--focused': modalView === 0, 'modal__titleText--blurred': modalView === 1 }">
           新增人員</span>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -64,7 +64,7 @@
               </span>
             </div>
             <div 
-              class="categoryProgBar categoryProgBar__report" 
+              class="categoryProgBar categoryProgBar__report noPrint" 
               :style="{ 'background-color': pageData.Subjects.length ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">
               <div class="categoryProgBar__before" :style="{ width: `${pageData.Subjects.length ? (1 - parseInt(pageData.CurrentProfessionCompetency.Competency) / 217).toString() : '200'}` + 'px'}"></div>
             </div>
@@ -77,54 +77,54 @@
           </div>
         </div>
       </div>
-      <div class="modal__banner">
+      <div class="modal__banner noPrint">
         <div class="modal__bannerIcon"></div>
         <div class="modal__bannerText">
           作答時間：整體作答所花時間是否異常。謹慎認真：是否仔細看題作答。 <br />
           印象管理：是否刻意想展現良好形象。作答傾向：是否太過中庸或極端。
         </div>
       </div>
-      <div class="modal__section model__section--consequtive" v-if="Object.keys(pageData.CurrentProfessionCompetency).length > 0">
+      <div class="modal__section model__section--consequtive breakPage" v-if="Object.keys(pageData.CurrentProfessionCompetency).length > 0">
         <div class="modal__sectionTitle">職能匹配九宮格</div>
         <div class="divideWrapper">
           <div class="modal__graph">
-            <div class="modal__graphNumber" :style="{ color: Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">{{ Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? (parseInt(pageData.CurrentProfessionCompetency.Competency)).toString() : '0' }}</div>
-            <div id="graph" style="height: 150px; width: 150px;"></div>
+            <div class="modal__graphNumber noPrint" :style="{ color: Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">{{ Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? (parseInt(pageData.CurrentProfessionCompetency.Competency)).toString() : '0' }}</div>
+            <div id="graph" style="height: 150px; width: 150px;" class="noPrint"></div>
             <div class="modal__graphDesc">
               <div class="modal__graphDescTitle modal__graphDescTitle--success" :style="{ color: Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '#33a588' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '#f5b537' : '#db5a5a' : '#db5a5a' }">{{ Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? parseInt(pageData.CurrentProfessionCompetency.Competency) > 80 ? '高於平均值' : parseInt(pageData.CurrentProfessionCompetency.Competency) >= 60 ? '平均值' : '低於平均值' : '低於平均值' }}</div>
               <div class="modal__graphDescBody">當前對比職系：{{ Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? pageData.CurrentProfessionCompetency.Profession: 'Placeholder' }}</div>
             </div>
           </div>
           <table class="simpleTable simpleTable--small">
-              <thead class="simpleTable__header">
-                <tr>
-                  <th class="simpleTable__headerCell">當前職系：{{ Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? pageData.CurrentProfessionCompetency.Profession: 'Placeholder' }}</th>
-                  <th class="simpleTable__headerCell">重要</th>
-                  <th class="simpleTable__headerCell">普通</th>
-                  <th class="simpleTable__headerCell">不重要</th>
-                </tr>
-              </thead>
-              <div class="simpleTable__divider"></div>
-              <tbody class="simpleTable__body">
+            <thead class="simpleTable__header">
+              <tr>
+                <th class="simpleTable__headerCell">當前職系：{{ Object.keys(pageData.CurrentProfessionCompetency).length > 0 ? pageData.CurrentProfessionCompetency.Profession: 'Placeholder' }}</th>
+                <th class="simpleTable__headerCell">重要</th>
+                <th class="simpleTable__headerCell">普通</th>
+                <th class="simpleTable__headerCell">不重要</th>
+              </tr>
+            </thead>
+            <div class="simpleTable__divider noPrint"></div>
+            <tbody class="simpleTable__body">
+              <tr class="simpleTable__row simpleTable__row--even">
+                <td class="simpleTable__col">優勢</td>
+                <td class="simpleTable__col" v-html="nineBoxItem(0)"></td>
+                <td class="simpleTable__col" v-html="nineBoxItem(1)"></td>
+                <td class="simpleTable__col" v-html="nineBoxItem(2)"></td>
+              </tr>
                 <tr class="simpleTable__row simpleTable__row--even">
-                  <td class="simpleTable__col">優勢</td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(0)"></td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(1)"></td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(2)"></td>
-                </tr>
-                  <tr class="simpleTable__row simpleTable__row--even">
-                    <td class="simpleTable__col">普通</td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(3)"></td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(4)"></td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(5)"></td>
-                </tr>
-                  <tr class="simpleTable__row simpleTable__row--even">
-                  <td class="simpleTable__col">劣勢</td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(6)"></td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(7)"></td>
-                  <td class="simpleTable__col" v-html="nineBoxItem(8)"></td>
-                </tr>
-              </tbody>
+                  <td class="simpleTable__col">普通</td>
+                <td class="simpleTable__col" v-html="nineBoxItem(3)"></td>
+                <td class="simpleTable__col" v-html="nineBoxItem(4)"></td>
+                <td class="simpleTable__col" v-html="nineBoxItem(5)"></td>
+              </tr>
+                <tr class="simpleTable__row simpleTable__row--even">
+                <td class="simpleTable__col">劣勢</td>
+                <td class="simpleTable__col" v-html="nineBoxItem(6)"></td>
+                <td class="simpleTable__col" v-html="nineBoxItem(7)"></td>
+                <td class="simpleTable__col" v-html="nineBoxItem(8)"></td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -383,7 +383,7 @@
           <div v-if="pageData.Weaknesses.length === 0">無</div>
         </div>
       </div>
-      <div class="modal__section model__section--consequtive">
+      <div class="modal__section model__section--consequtive breakPage">
         <div class="modal__sectionTitle">分析與劣勢建議</div>
         <div class="inputWrapper boxWrapper">
           <div class="modal__pp" v-html="advice"></div>
@@ -462,7 +462,7 @@
         </div>
       </div>
     </div>
-    <div class="modal__footer">
+    <div class="modal__footer noPrint">
       <div class="modal__footerToolbar">
         <div class="btn btn--wide btn--lasso btn--rounded" style="margin-right:12px;" @click="handlePrint">列印</div>
         <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="handleCloseWindow">確定</div>
@@ -473,6 +473,7 @@
 
 <script>
 import { $axios } from '~/utils/api'
+import { eventStopDefault } from '~/utils/helpers'
 
 export default {
   middleware: ['auth'],
@@ -611,15 +612,17 @@ export default {
     handleCloseWindow() {
       window.close()
     },
-    handlePrint() {
+    handlePrint($event) {
+      eventStopDefault($event)
       this.processPrint()
     },
     processPrint() {
       const ogHtml = document.body.innerHTML
-      document.body.innerHTML = document.querySelector('#print').innerHTML
+      // document.body.innerHTML = document.querySelector('#print').innerHTML
       console.log(document.body.innerHTML)
       window.print()
-      document.body.innerHTML = ogHtml
+      // document.body.innerHTML = ogHtml
+      return true
     },
     async sendGetAssessmentResultRequest() {
       try {
@@ -665,7 +668,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../../assets/scss/utils/print';
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 </style>
