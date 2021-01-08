@@ -35,13 +35,14 @@
         <div class="privacyBox__banner privacy__btn privacy__btn--opened" @click="handleClosePrivacy">
           {{ i18nTarget('C0103') || 'privacy policy' }}
         </div>
-        <div class="privacyBox__text">
-歡迎您光臨CAT職能認知測評平台(以下稱「本平台」)，本平台是由鼎恒數位科技股份有限公司 (以下稱「本公司」)所提供，本平台謹依個人資料保護法（以下簡稱個資法）與本《隱私權政策》搜集、處理及利用您的個人資料，並承諾尊重以及保護您個人於本平台的隱私權。特此說明本平台的隱私權政策，以保障您的權益。請您細讀以下有關本政策的內容：
+        <div class="privacyBox__text" v-html="privacyText" v-show="privacyText"></div>
+        <div class="privacyBox__text" v-if="!privacyText">
+          Placeholder
         <br />
-        <div class="privacyBox__secTitle">適用範圍</div>
+        <div class="privacyBox__secTitle">Placeholder</div>
         <ul class="privacyBox__list">
-          <li>您使用本平台時，所涉及的個人資料蒐集、處理與相關利用行為，均受到本隱私權政策之保護。基於對個人權益的維護及尊重，本平台對於個人資料之蒐集、處理及利用，將以誠實及信用方法為之，除有法律特別規定外，不會逾越特定目的之必要範圍，並與蒐集之目的具有正當合理之關聯。</li>
-          <li>本隱私權政策僅適用於本平台及本平台所委託或參與蒐集、處理及利用的個人資料，凡非透過本平台相關連結但非屬本平台所委託或參與管理之平台所提供之個人資料，並不適用本隱私權政策之規定。</li>
+          <li>Placeholder</li>
+          <li>Placeholder</li>
         </ul>
         </div>
         <div class="privacy__checkbox">
@@ -162,7 +163,7 @@ export default class f2eLanding extends Vue {
       switch (result.data.StatusCode) {
         case 0:
           this.expiration = new Date(result.data.Results[0].ExpirationTime)
-          return result.data.Results[0].Items
+          return result.data.Results[0]
         case 99203:
         case 99003:
           throw new Error(result.data.StatusCode.toString())
@@ -176,6 +177,8 @@ export default class f2eLanding extends Vue {
 
   private answers: Array<Answer> = []
 
+  private privacyText: string = ''
+
   private async initAssessment() {
     try {
       if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
@@ -185,14 +188,15 @@ export default class f2eLanding extends Vue {
       const result = await this.sendGetAssessmentRequest()
       console.log(result)
 
-      this.questions = result.map((item: any) => ({
+      this.questions = result.Items.map((item: any) => ({
         id: item.ItemId,
         title: item.Item
       }))
-      this.answers = result.map((item: any) => ({
+      this.answers = result.Items.map((item: any) => ({
         id: item.ItemId,
         scale: null
       }))
+      this.privacyText = result.PrivacyPolicy
       this.allowRender = true
     } catch(e) {
       this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
