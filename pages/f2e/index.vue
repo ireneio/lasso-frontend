@@ -283,8 +283,6 @@ export default class f2eIndex extends Vue {
     document.onmousedown = this.disableselect
   }
 
-
-
   private async created() {
     if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey) {
       // this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })

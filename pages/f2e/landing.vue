@@ -128,7 +128,7 @@ export default class f2eLanding extends Vue {
   }
 
   private handleClosePrivacy(): void {
-    window.scrollTo(0, 99999);
+    window.scrollTo(0, 99999)
     this.privacyOpened = false
   }
 
@@ -424,5 +424,4 @@ export default class f2eLanding extends Vue {
     }
   }
 }
-
 </style>
