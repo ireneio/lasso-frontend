@@ -104,7 +104,6 @@ export default class f2eLanding extends Vue {
               },
               query: { type: 'enabled' } })
           } catch (e) {
-            console.log(e.message)
             this.clicked = 'invalid'
             this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
           }
@@ -186,7 +185,6 @@ export default class f2eLanding extends Vue {
       }
       await I18nFactory.init()
       const result = await this.sendGetAssessmentRequest()
-      console.log(result)
 
       this.questions = result.Items.map((item: any) => ({
         id: item.ItemId,
