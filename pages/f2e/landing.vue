@@ -17,7 +17,7 @@
           如果您已經準備就緒，請點選確認按鈕開始作答。
         </div>
         <div class="privacy__btn privacy__btn--closed" @click="handleReadPrivacy" v-show="!privacyOpened">
-          隱私權政策
+          {{ i18nTarget('C0103') || 'privacy policy' }}
         </div>
         <div class="privacy__checkbox">
           <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
@@ -33,7 +33,7 @@
       </div>
       <div class="privacyBox" v-show="privacyOpened">
         <div class="privacyBox__banner privacy__btn privacy__btn--opened" @click="handleClosePrivacy">
-          隱私權政策
+          {{ i18nTarget('C0103') || 'privacy policy' }}
         </div>
         <div class="privacyBox__text">
 歡迎您光臨CAT職能認知測評平台(以下稱「本平台」)，本平台是由鼎恒數位科技股份有限公司 (以下稱「本公司」)所提供，本平台謹依個人資料保護法（以下簡稱個資法）與本《隱私權政策》搜集、處理及利用您的個人資料，並承諾尊重以及保護您個人於本平台的隱私權。特此說明本平台的隱私權政策，以保障您的權益。請您細讀以下有關本政策的內容：
