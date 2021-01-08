@@ -305,6 +305,7 @@ export default class f2eLanding extends Vue {
     justify-content: center;
     cursor: pointer;
     text-align: center;
+    text-transform: capitalize;
     font-size: 12px;
     margin-bottom: 12px;
     &--closed {
