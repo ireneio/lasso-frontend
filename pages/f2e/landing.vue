@@ -2,7 +2,7 @@
   <div>
     <div class="wrapper" v-if="allowRender" v-show="!loading">
       <div class="logo"></div>
-      <section class="section privacy">
+      <section class="section privacy" v-show="!privacyOpened">
         <div class="privacy__text" v-html="i18nTarget('C0101')" v-if="i18nTarget('C0101') !== ''"></div>
         <div class="privacy__text" v-else>
           填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
@@ -16,15 +16,45 @@
           <br />
           如果您已經準備就緒，請點選確認按鈕開始作答。
         </div>
+        <div class="privacy__btn privacy__btn--closed" @click="handleReadPrivacy" v-show="!privacyOpened">
+          隱私權政策
+        </div>
         <div class="privacy__checkbox">
           <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
             <input type="checkbox" v-model="privacy" id="privacy">
           </label>
-          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget('C0102') || 'I agree to the' }} <span class="privacy__highlight">{{ i18nTarget('C0103') || 'privacy policy' }}</span> </label>
+          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget('C0102') || 'I agree to the' }} {{ i18nTarget('C0103') || 'privacy policy' }}</label>
         </div>
       </section>
-      <div class="line line3">
-        <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">{{ i18nTarget('C0104') || 'START' }}</button>
+      <div class="buttonBox">
+        <div class="line line3">
+          <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">{{ i18nTarget('C0104') || 'START' }}</button>
+        </div>
+      </div>
+      <div class="privacyBox" v-show="privacyOpened">
+        <div class="privacyBox__banner privacy__btn privacy__btn--opened" @click="handleClosePrivacy">
+          隱私權政策
+        </div>
+        <div class="privacyBox__text">
+歡迎您光臨CAT職能認知測評平台(以下稱「本平台」)，本平台是由鼎恒數位科技股份有限公司 (以下稱「本公司」)所提供，本平台謹依個人資料保護法（以下簡稱個資法）與本《隱私權政策》搜集、處理及利用您的個人資料，並承諾尊重以及保護您個人於本平台的隱私權。特此說明本平台的隱私權政策，以保障您的權益。請您細讀以下有關本政策的內容：
+        <br />
+        <div class="privacyBox__secTitle">適用範圍</div>
+        <ul class="privacyBox__list">
+          <li>您使用本平台時，所涉及的個人資料蒐集、處理與相關利用行為，均受到本隱私權政策之保護。基於對個人權益的維護及尊重，本平台對於個人資料之蒐集、處理及利用，將以誠實及信用方法為之，除有法律特別規定外，不會逾越特定目的之必要範圍，並與蒐集之目的具有正當合理之關聯。</li>
+          <li>本隱私權政策僅適用於本平台及本平台所委託或參與蒐集、處理及利用的個人資料，凡非透過本平台相關連結但非屬本平台所委託或參與管理之平台所提供之個人資料，並不適用本隱私權政策之規定。</li>
+        </ul>
+        </div>
+        <div class="privacy__checkbox">
+          <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
+            <input type="checkbox" v-model="privacy" id="privacy">
+          </label>
+          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget('C0102') || 'I agree to the' }} {{ i18nTarget('C0103') || 'privacy policy' }}</label>
+        </div>
+        <div class="buttonBox privacyBox__btnBox">
+          <div class="line line3">
+            <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">{{ i18nTarget('C0104') || 'START' }}</button>
+          </div>
+        </div>
       </div>
     </div>
     <!-- <div class="loading" v-show="loading"></div> -->
@@ -35,6 +65,7 @@
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { $axios } from '~/utils/api'
 import { I18nFactory } from '~/utils/i18n'
+import { eventStopDefault } from '~/utils/helpers'
 
 @Component({
   layout: 'landing'
@@ -89,6 +120,18 @@ export default class f2eLanding extends Vue {
 
   private allowRender: boolean = false
 
+  private privacyOpened: boolean = false
+
+  private handleReadPrivacy($event: Event): void {
+    eventStopDefault($event)
+    this.privacyOpened = true
+  }
+
+  private handleClosePrivacy(): void {
+    window.scrollTo(0, 99999);
+    this.privacyOpened = false
+  }
+
   private async created() {
     if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
       this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
@@ -114,6 +157,7 @@ export default class f2eLanding extends Vue {
 @import '../../assets/scss/utils/_variables.scss';
 
 .wrapper {
+  // position: relative;
   min-height: 100vh;
   min-width: 100vw;
   // padding-top: 348px;
@@ -171,8 +215,7 @@ export default class f2eLanding extends Vue {
 .line3 {
   position: relative;
   z-index: 2;
-  margin-top: 44px;
-  margin-bottom: 69px;
+  // margin-bottom: 69px;
   background-image: url(/line_c@3x.png);
   height: 39px;
   text-align: center;
@@ -184,7 +227,7 @@ export default class f2eLanding extends Vue {
   color: $black;
 }
 .section {
-  padding: 0 45px;
+  // padding: 0 45px;
   &__box {
     margin-top: 120px;
   }
@@ -233,14 +276,21 @@ export default class f2eLanding extends Vue {
   background-position: center center;
 }
 .privacy {
+  background-image: linear-gradient(to bottom, #ffffff 40%, rgba(237, 237, 237));
   margin-top: 40px;
   &__text {
+    padding: 0 45px;
+    padding-top: 45px;
     margin-bottom: 40px;
     font-size: 17px;
   }
   &__checkbox {
+    padding: 16px 45px 0 45px;
+    width: 100vw;
+    background-color: #fff;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-size: 15px;
   }
   &__checkboxText {
@@ -248,6 +298,37 @@ export default class f2eLanding extends Vue {
   }
   &__highlight {
     color: #e2a638;
+  }
+  &__btn {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 12px;
+    &--closed {
+      &:after {
+        content: '';
+        margin-top: 3px;
+        margin-left: 4px;
+        border-left: 4px solid transparent;
+        border-top: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-bottom: 4px solid #393939;
+     }
+    }
+    &--opened {
+      &:after {
+        content: '';
+        margin-top: 7px;
+        margin-left: 4px;
+        border-left: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #393939;
+     }
+    }
   }
 }
 .button {
@@ -292,6 +373,53 @@ export default class f2eLanding extends Vue {
       height: 9px;
       background-color: #fff;
       transform: rotate(40deg) translateX(3px) translateY(-9px);
+    }
+  }
+}
+.buttonBox {
+  padding-top: 44px;
+  padding-bottom: 44px;
+  background-color: #fff;
+}
+.privacyBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100vw; 
+  height: 100vh;
+  overflow: auto;
+  background-image: linear-gradient(to bottom, #ffffff 17%, #ededed);
+  &__banner {
+    padding: 15px 0;
+    color: #393939;
+    margin-bottom: 0;
+  }
+  &__text {
+    height: 75vh;
+    overflow: auto;
+    color: #fff;
+    background-color: #5f5f5f;
+    margin: 0 20px;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  &__secTitle {
+    color: #e2a638;
+    font-size: 17px;
+    margin-top: 14px;
+    margin-bottom: 12px;
+  }
+  &__list {
+    font-weight: 100;
+    padding-left: 20px;
+    list-style-type: decimal;
+  }
+  &__btnBox {
+    padding-bottom: 32px;
+    .line {
+      margin-bottom: 0;
     }
   }
 }
