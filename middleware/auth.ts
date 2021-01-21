@@ -3,8 +3,11 @@ import { AxiosRequestConfig } from 'axios'
 import { $authVerify } from '~/utils/api'
 import Token from '~/utils/token'
 
+const flag: boolean = false
+
 async function init(): Promise<boolean | string> {
-  const token: string | boolean = Token.getToken()
+  if(flag) {
+    const token: string | boolean = Token.getToken()
   if(token) {
     const config: AxiosRequestConfig = {
       headers: {
@@ -24,13 +27,17 @@ async function init(): Promise<boolean | string> {
   } else {
     return false
   }
+  }
+  else return true
 }
 
 export default async function ({ redirect }: Context) {
   return new Promise(async (resolve: Function, reject: Function): Promise<void> => {
     const token = await init()
-    if(token && typeof token === 'string') {
+    if(token && typeof token === 'string' && flag) {
       Token.setToken(token)
+      resolve(true)
+    } else if(!flag) {
       resolve(true)
     } else {
       reject(redirect('/sys/login'))

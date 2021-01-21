@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="toolbar">
-      <div class="btn toolbar__btn" 
+      <div class="btn toolbar__btn"
         @click="handleSendInvitationMultiple"
         :class="{'btn--disabled': checked.length <= 1, 'btn--primary': checked.length > 0 }"
       >
@@ -157,7 +157,7 @@
                   </select>
                 </div>
               </div>
-            </div>         
+            </div>
           </div>
         </div>
         <div class="modal__section model__section--consequtive">
@@ -236,7 +236,7 @@
           </div>
         </div>
       </div>
-      <div class="modal__footer">
+      <div class="modal__footer modal__footer--small">
         <div class="modal__footerToolbar">
           <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="toggleAddNewPersonnelModal = false">取消</div>
           <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive" @click="handleAddNewPersonnel">確定</div>
@@ -263,7 +263,7 @@
                   <div class="list__icon"></div>
                 </div>
               </div>
-            </div>         
+            </div>
           </div>
         </div>
         <div class="modal__section model__section--consequtive">
@@ -299,7 +299,7 @@
           </div>
         </div>
       </div>
-      <div class="modal__footer">
+      <div class="modal__footer modal__footer--small">
         <div class="modal__footerToolbar">
           <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="toggleSendInviteModal = false">取消</div>
           <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive" @click="handleSendInvitation">確定</div>
@@ -326,11 +326,11 @@
                   <div class="list__icon"></div>
                 </div>
               </div>
-            </div>         
+            </div>
           </div>
         </div>
       </div>
-      <div class="modal__footer">
+      <div class="modal__footer modal__footer--small">
         <div class="modal__footerToolbar">
           <div class="btn btn--wide btn--lassoOutlined btn--rounded" @click="toggleSendReportModal = false">取消</div>
           <div class="btn btn--lasso btn--wide2x btn--rounded modal__footerToolbarBtn--consequtive" @click="handleSendReport">確定</div>
@@ -385,7 +385,7 @@
                   </select>
                 </div>
               </div>
-            </div>         
+            </div>
           </div>
         </div>
         <div class="modal__section model__section--consequtive">
@@ -565,7 +565,7 @@ export default {
         this.checked = this.checked.filter(item => item !== row.SubjectId)
       }
     },
-    async sendGetParametersRequest(type, code) {    
+    async sendGetParametersRequest(type, code) {
       try {
         const requestBody = {
                 Conditions: [
@@ -581,13 +581,13 @@ export default {
         console.log(e)
       }
     },
-    async sendCreateAssessmentRequest(list, type) {   
-      let requestBody 
+    async sendCreateAssessmentRequest(list, type) {
+      let requestBody
       try {
         if(type === 'invitation') {
           requestBody = {
             Contents: [
-              { 
+              {
                 SubjectId: this.subjectId,
                 Type: 'CAT',
                 EnableInvite: true,
@@ -600,7 +600,7 @@ export default {
         } else {
           requestBody = {
             Contents: [
-              { 
+              {
                 SubjectId: this.subjectId,
                 Type: list[0],
                 EnableInvite: true,
@@ -611,13 +611,13 @@ export default {
             ]
           }
         }
-        
+
         const result = await $axios.post('/Assessment/CreateAssessments', requestBody)
       } catch(e) {
         console.log(e)
       }
     },
-    async sendAddNewPersonnelRequest() {    
+    async sendAddNewPersonnelRequest() {
       try {
         const requestBody = {
           Contents: [

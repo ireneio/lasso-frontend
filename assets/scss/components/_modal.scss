@@ -192,6 +192,10 @@
     display: flex;
     align-items: center;
     padding: 27px 25px;
+    &--small {
+      position: static;
+      width: 100%;
+    }
   }
   &__footerToolbar {
     display: flex;
