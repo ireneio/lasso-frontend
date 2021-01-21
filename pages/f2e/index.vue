@@ -113,13 +113,12 @@ import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { $axios } from '~/utils/api'
 import { Answer, Questionnaire } from '~/types/index'
 import { I18nFactory } from '~/utils/i18n'
+import f2eLanding from '~/pages/f2e/landing.vue'
 
 @Component({
   layout: 'frontend',
 })
 export default class f2eIndex extends Vue {
-  private show: boolean = false
-
   private get browserLanguage(): string {
     return navigator.language
   }
@@ -216,29 +215,6 @@ export default class f2eIndex extends Vue {
     return dateStr + ' ' + timeStr
   }
 
-  private async sendGetAssessmentRequest(): Promise<any> {
-    const requestBody = {
-      Conditions: [
-        {
-          InvitationKey: this.getInvitationKey
-        }
-      ]
-    }
-    const result = await $axios.post('/Client/GetAssessment', requestBody)
-    if (result) {
-      switch (result.data.StatusCode) {
-        case 0:
-          this.expiration = new Date(result.data.Results[0].ExpirationTime)
-          return result.data.Results[0].Items
-        case 99203:
-        case 99003:
-          throw new Error(result.data.StatusCode.toString())
-        default:
-          throw new Error(result.data.StatusCode.toString())
-      }
-    }
-  }
-
   private async sendSubmitAssessmentRequest(): Promise<any> {
     const requestBody = {
       Contents: [
@@ -253,9 +229,6 @@ export default class f2eIndex extends Vue {
         }
       ]
     }
-
-    // console.log(JSON.stringify(requestBody))
-
     const result = await $axios.post(
       '/Client/UpdateAssessmentScales',
       requestBody
@@ -283,37 +256,38 @@ export default class f2eIndex extends Vue {
     document.onmousedown = this.disableselect
   }
 
+  private initData(): void {
+    try {
+      if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled') {
+        throw new Error('Required Key Missing')
+      }
+      this.questions = JSON.parse(this.$route.params.questions)
+      this.answers = JSON.parse(this.$route.params.answers)
+    } catch(e) {
+      this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
+    }
+  }
 
+  private initTimer(): void {
+    this.startTime = new Date()
+    this.interval = setInterval(() => {
+      this.timer === null ? (this.timer = 1000) : (this.timer += 1000)
+    }, 1000)
+  }
+
+  private interval: any = null
 
   private async created() {
-    if (!this.$route.query.type || this.$route.query.type.toString() !== 'enabled' || this.$route.params.InvitationKey === 'undefined' || !this.$route.params.InvitationKey) {
-      // this.$router.push({ name: 'f2e-error', params: { statusCode: '99203' }, query: { type: 'success' } })
-      return
-    }
-    try {
-      const result = await this.sendGetAssessmentRequest()
-      this.show = true
-      this.startTime = new Date()
-
-      setInterval(() => {
-        this.timer === null ? (this.timer = 1000) : (this.timer += 1000)
-      }, 1000)
-
-      this.questions = result.map((item: any) => ({
-        id: item.ItemId,
-        title: item.Item
-      }))
-      this.answers = result.map((item: any) => ({
-        id: item.ItemId,
-        scale: null
-      }))
-    } catch (e) {
-      // this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
-    }
+    this.initData()
+    this.initTimer()
   }
 
   private mounted() {
     this.initDisableSelect()
+  }
+
+  private beforeDestroy() {
+    this.interval = null
   }
 }
 </script>

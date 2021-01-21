@@ -2,7 +2,7 @@
   <div>
     <div class="wrapper" v-if="allowRender" v-show="!loading">
       <div class="logo"></div>
-      <section class="section privacy">
+      <section class="section privacy" v-show="!privacyOpened">
         <div class="privacy__text" v-html="i18nTarget('C0101')" v-if="i18nTarget('C0101') !== ''"></div>
         <div class="privacy__text" v-else>
           填答時，請仔細閱讀每項敘述，然後判斷該敘述與您目前實際情況符合程度。並沒有標準答案，請您依照自身真實狀況進行填答。
@@ -16,15 +16,46 @@
           <br />
           如果您已經準備就緒，請點選確認按鈕開始作答。
         </div>
+        <div class="privacy__btn privacy__btn--closed" @click="handleReadPrivacy" v-show="!privacyOpened">
+          {{ i18nTarget('C0103') || 'privacy policy' }}
+        </div>
         <div class="privacy__checkbox">
           <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
             <input type="checkbox" v-model="privacy" id="privacy">
           </label>
-          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget('C0102') || 'I agree to the' }} <span class="privacy__highlight">{{ i18nTarget('C0103') || 'privacy policy' }}</span> </label>
+          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget('C0102') || 'I agree to the' }} {{ i18nTarget('C0103') || 'privacy policy' }}</label>
         </div>
       </section>
-      <div class="line line3">
-        <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">{{ i18nTarget('C0104') || 'START' }}</button>
+      <div class="buttonBox">
+        <div class="line line3">
+          <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">{{ i18nTarget('C0104') || 'START' }}</button>
+        </div>
+      </div>
+      <div class="privacyBox" v-show="privacyOpened">
+        <div class="privacyBox__banner privacy__btn privacy__btn--opened" @click="handleClosePrivacy">
+          {{ i18nTarget('C0103') || 'privacy policy' }}
+        </div>
+        <div class="privacyBox__text" v-html="privacyText" v-show="privacyText"></div>
+        <div class="privacyBox__text" v-if="!privacyText">
+          Placeholder
+        <br />
+        <div class="privacyBox__secTitle">Placeholder</div>
+        <ul class="privacyBox__list">
+          <li>Placeholder</li>
+          <li>Placeholder</li>
+        </ul>
+        </div>
+        <div class="privacy__checkbox">
+          <label class="checkbox" for="privacy" :class="{ 'checkbox--checked': privacy }">
+            <input type="checkbox" v-model="privacy" id="privacy">
+          </label>
+          <label class="privacy__checkboxText" for="privacy">{{ i18nTarget('C0102') || 'I agree to the' }} {{ i18nTarget('C0103') || 'privacy policy' }}</label>
+        </div>
+        <div class="buttonBox privacyBox__btnBox">
+          <div class="line line3">
+            <button @click="handleStart" class="button" :class="{ 'button--disabled': !privacy || clicked === 'invalid' }">{{ i18nTarget('C0104') || 'START' }}</button>
+          </div>
+        </div>
       </div>
     </div>
     <!-- <div class="loading" v-show="loading"></div> -->
@@ -35,6 +66,8 @@
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { $axios } from '~/utils/api'
 import { I18nFactory } from '~/utils/i18n'
+import { eventStopDefault } from '~/utils/helpers'
+import { Answer, Questionnaire } from '~/types/index'
 
 @Component({
   layout: 'landing'
@@ -62,9 +95,15 @@ export default class f2eLanding extends Vue {
             if (key === 'undefined' || key === '') {
               throw new Error('Err')
             }
-            this.$router.push({ name: 'f2e', params: { InvitationKey: key }, query: { type: 'enabled' } })
+            this.$router.push({
+              name: 'f2e',
+              params: {
+                InvitationKey: key,
+                questions: JSON.stringify(this.questions),
+                answers: JSON.stringify(this.answers) 
+              },
+              query: { type: 'enabled' } })
           } catch (e) {
-            console.log(e.message)
             this.clicked = 'invalid'
             this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
           }
@@ -89,12 +128,81 @@ export default class f2eLanding extends Vue {
 
   private allowRender: boolean = false
 
-  private async created() {
-    if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
-      this.$router.push({ name: 'f2e-error', params: { statusCode: 'Required Key Missing' }, query: { type: 'success' } })
+  private privacyOpened: boolean = false
+
+  private handleReadPrivacy($event: Event): void {
+    eventStopDefault($event)
+    this.privacyOpened = true
+  }
+
+  private handleClosePrivacy(): void {
+    window.scrollTo(0, 99999)
+    this.privacyOpened = false
+  }
+
+  private expiration: Date | null = null
+
+  private get getInvitationKey(): string {
+    // @ts-ignore
+    const uri: string = encodeURIComponent(this.$route.query.InvitationKey) || ''
+    // @ts-ignore
+    return decodeURIComponent(uri)
+  }
+
+  private async sendGetAssessmentRequest(): Promise<any> {
+    const requestBody = {
+      Conditions: [
+        {
+          InvitationKey: this.getInvitationKey
+        }
+      ]
     }
-    await I18nFactory.init()
-    this.allowRender = true
+    const result = await $axios.post('/Client/GetAssessment', requestBody)
+    if (result) {
+      switch (result.data.StatusCode) {
+        case 0:
+          this.expiration = new Date(result.data.Results[0].ExpirationTime)
+          return result.data.Results[0]
+        case 99203:
+        case 99003:
+          throw new Error(result.data.StatusCode.toString())
+        default:
+          throw new Error(result.data.StatusCode.toString())
+      }
+    }
+  }
+
+  private questions: Array<Questionnaire> = []
+
+  private answers: Array<Answer> = []
+
+  private privacyText: string = ''
+
+  private async initAssessment() {
+    try {
+      if (!this.$route.query.InvitationKey || this.$route.query.InvitationKey === 'undefined') {
+        throw new Error('Required Key Missing')
+      }
+      await I18nFactory.init()
+      const result = await this.sendGetAssessmentRequest()
+
+      this.questions = result.Items.map((item: any) => ({
+        id: item.ItemId,
+        title: item.Item
+      }))
+      this.answers = result.Items.map((item: any) => ({
+        id: item.ItemId,
+        scale: null
+      }))
+      this.privacyText = result.PrivacyPolicy
+      this.allowRender = true
+    } catch(e) {
+      this.$router.push({ name: 'f2e-error', params: { statusCode: e.message.toString() }, query: { type: 'success' } })
+    }
+  }
+
+  private async created() {
+    await this.initAssessment()
   }
 
   private mounted() {
@@ -114,6 +222,7 @@ export default class f2eLanding extends Vue {
 @import '../../assets/scss/utils/_variables.scss';
 
 .wrapper {
+  // position: relative;
   min-height: 100vh;
   min-width: 100vw;
   // padding-top: 348px;
@@ -171,8 +280,7 @@ export default class f2eLanding extends Vue {
 .line3 {
   position: relative;
   z-index: 2;
-  margin-top: 44px;
-  margin-bottom: 69px;
+  // margin-bottom: 69px;
   background-image: url(/line_c@3x.png);
   height: 39px;
   text-align: center;
@@ -184,7 +292,7 @@ export default class f2eLanding extends Vue {
   color: $black;
 }
 .section {
-  padding: 0 45px;
+  // padding: 0 45px;
   &__box {
     margin-top: 120px;
   }
@@ -233,14 +341,21 @@ export default class f2eLanding extends Vue {
   background-position: center center;
 }
 .privacy {
+  background-image: linear-gradient(to bottom, #ffffff 40%, rgba(237, 237, 237));
   margin-top: 40px;
   &__text {
+    padding: 0 45px;
+    padding-top: 45px;
     margin-bottom: 40px;
     font-size: 17px;
   }
   &__checkbox {
+    padding: 16px 45px 0 45px;
+    width: 100vw;
+    background-color: #fff;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-size: 15px;
   }
   &__checkboxText {
@@ -248,6 +363,38 @@ export default class f2eLanding extends Vue {
   }
   &__highlight {
     color: #e2a638;
+  }
+  &__btn {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 12px;
+    margin-bottom: 12px;
+    &--closed {
+      &:after {
+        content: '';
+        margin-top: 3px;
+        margin-left: 4px;
+        border-left: 4px solid transparent;
+        border-top: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-bottom: 4px solid #393939;
+     }
+    }
+    &--opened {
+      &:after {
+        content: '';
+        margin-top: 7px;
+        margin-left: 4px;
+        border-left: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #393939;
+     }
+    }
   }
 }
 .button {
@@ -295,5 +442,51 @@ export default class f2eLanding extends Vue {
     }
   }
 }
-
+.buttonBox {
+  padding-top: 44px;
+  padding-bottom: 44px;
+  background-color: #fff;
+}
+.privacyBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100vw; 
+  height: 100vh;
+  overflow: auto;
+  background-image: linear-gradient(to bottom, #ffffff 17%, #ededed);
+  &__banner {
+    padding: 15px 0;
+    color: #393939;
+    margin-bottom: 0;
+  }
+  &__text {
+    height: 75vh;
+    overflow: auto;
+    color: #fff;
+    background-color: #5f5f5f;
+    margin: 0 20px;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  &__secTitle {
+    color: #e2a638;
+    font-size: 17px;
+    margin-top: 14px;
+    margin-bottom: 12px;
+  }
+  &__list {
+    font-weight: 100;
+    padding-left: 20px;
+    list-style-type: decimal;
+  }
+  &__btnBox {
+    padding-bottom: 32px;
+    .line {
+      margin-bottom: 0;
+    }
+  }
+}
 </style>

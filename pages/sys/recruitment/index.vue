@@ -88,7 +88,7 @@
                 v-if="colValue === 9 || colValue === 99 || colValue === 2 || colValue === 3 || colValue === 4 || colValue === 0 || colValue === 1"
               >
               </div>
-              <div class="report" v-else @click="handleOpenReport(row)"></div>
+              <div class="report" v-else @click="handleOpenReport($event, row)"></div>
             </div>
           </td>
           <td class="table__cell">
@@ -429,6 +429,7 @@
 
 <script>
 import { $axios } from '~/utils/api'
+import { eventStopDefault } from '~/utils/helpers'
 
 export default {
   layout: 'backend',
@@ -499,7 +500,8 @@ export default {
     handleRowClick() {
       this.toggleBasicDetailModal = true
     },
-    handleOpenReport(row) {
+    handleOpenReport($event, row) {
+      eventStopDefault($event)
       window.open(`/sys/recruitment/report?SubjectId=${row.SubjectId}&AssessmentId=${row.CATId}`, '_blank')
     },
     async handleSendReport() {
